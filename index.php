@@ -130,72 +130,72 @@
         </a>
       </nav>
     </header>
-    <section class="search-filter">
-      <div class="search-container">
-        <form action="index.php" method="get">
-          <div class="input">
-            <input
-              type="text"
-              class="search-input"
-              name="search_kerja"
-              placeholder="Judul Pekerjaan"
-            />
-            <button name="submit_judul" type="submit" class="search-button">Cari</button>
-          </div>
-        </form>
-      </div>
-      <div class="filter-container">
-        <form action="index.php" method="get">
-          <select name="job_type" id="job-type" class="custom-select">
-            <option value="">Job Type</option>
-            <?php
-              $sql = "SELECT DISTINCT jenis_pekerjaan FROM lowongan";
-              $result = mysqli_query($conn, $sql);
-              $job_type = [];
-              if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                  $job_type[] = $row['jenis_pekerjaan'];
-                }
-              }
-              foreach($job_type as $jt) :?>
-                <option value="<?= htmlspecialchars($jt) ?>"><?= htmlspecialchars($jt) ?></option>
-            <?php endforeach; ?>
-          </select>
-          <select name="kategori" id="kategori" class="custom-select">
-            <option value="">Kategori</option>
-            <?php 
-              $sql = "SELECT DISTINCT kategori FROM lowongan";
-              $result = mysqli_query($conn, $sql);
-              $kategori = [];
-              if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                  $kategori[] = $row['kategori'];
-                }
-              }
-              foreach($kategori as $k) :?>
-              <option value="<?= htmlspecialchars($k) ?>"><?= htmlspecialchars($k) ?></option>
-            <?php endforeach; ?>
-          </select>
-          <select name="lokasi" id="lokasi" class="custom-select">
-            <option value="">Lokasi</option>
-            <?php 
-              $sql = "SELECT DISTINCT lokasi FROM lowongan";
-              $result = mysqli_query($conn, $sql);
-              $lokasi = [];
-              if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                  $lokasi[] = $row['lokasi'];
-                }
-              }
-              foreach($lokasi as $l) :?>
-              <option value="<?= htmlspecialchars($l) ?>"><?= htmlspecialchars($l) ?></option>
-            <?php endforeach; ?>
-          </select>
-          <button name="submit_filter" type="submit" class="search-button">Cari</button>
-        </form>
-      </div>
-    </section>
     <main>
+      <section class="search-filter">
+        <div class="search-container">
+          <form action="index.php" method="get">
+            <div class="input">
+              <input
+                type="text"
+                class="search-input"
+                name="search_kerja"
+                placeholder="Judul Pekerjaan"
+              />
+              <button name="submit_judul" type="submit" class="search-button">Cari</button>
+            </div>
+          </form>
+        </div>
+        <div class="filter-container">
+          <form action="index.php" method="get">
+            <select name="job_type" id="job-type" class="custom-select">
+              <option value="">Job Type</option>
+              <?php
+                $sql = "SELECT DISTINCT jenis_pekerjaan FROM lowongan";
+                $result = mysqli_query($conn, $sql);
+                $job_type = [];
+                if (mysqli_num_rows($result) > 0) {
+                  while ($row = mysqli_fetch_assoc($result)) {
+                    $job_type[] = $row['jenis_pekerjaan'];
+                  }
+                }
+                foreach($job_type as $jt) :?>
+                  <option value="<?= htmlspecialchars($jt) ?>"><?= htmlspecialchars($jt) ?></option>
+              <?php endforeach; ?>
+            </select>
+            <select name="kategori" id="kategori" class="custom-select">
+              <option value="">Kategori</option>
+              <?php 
+                $sql = "SELECT DISTINCT kategori FROM lowongan";
+                $result = mysqli_query($conn, $sql);
+                $kategori = [];
+                if (mysqli_num_rows($result) > 0) {
+                  while ($row = mysqli_fetch_assoc($result)) {
+                    $kategori[] = $row['kategori'];
+                  }
+                }
+                foreach($kategori as $k) :?>
+                <option value="<?= htmlspecialchars($k) ?>"><?= htmlspecialchars($k) ?></option>
+              <?php endforeach; ?>
+            </select>
+            <select name="lokasi" id="lokasi" class="custom-select">
+              <option value="">Lokasi</option>
+              <?php 
+                $sql = "SELECT DISTINCT lokasi FROM lowongan";
+                $result = mysqli_query($conn, $sql);
+                $lokasi = [];
+                if (mysqli_num_rows($result) > 0) {
+                  while ($row = mysqli_fetch_assoc($result)) {
+                    $lokasi[] = $row['lokasi'];
+                  }
+                }
+                foreach($lokasi as $l) :?>
+                <option value="<?= htmlspecialchars($l) ?>"><?= htmlspecialchars($l) ?></option>
+              <?php endforeach; ?>
+            </select>
+            <button name="submit_filter" type="submit" class="search-button">Cari</button>
+          </form>
+        </div>
+      </section>
       <section id="welcome">
         <div class="breadcrumb-bar">
           <div class="breadcrumb-text">

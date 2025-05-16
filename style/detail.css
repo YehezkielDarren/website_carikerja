@@ -13,7 +13,6 @@
   font-family: "IBM Plex Sans", sans-serif;
   margin: 0;
   padding: 0;
-  color: black;
 }
 body::-webkit-scrollbar {
   display: none;
@@ -195,10 +194,20 @@ nav a img:hover {
 }
 /* Bagian main */
 main {
+  background: linear-gradient(to right, #1f1c2c, #928dab);
+  display: flex;
+  flex-direction: column;
+  max-height: 100vw;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 main #welcome {
+  background: linear-gradient(to right, #1f1c2c, #928dab);
   font-weight: bolder;
   padding-bottom: 10px;
 }
@@ -309,9 +318,8 @@ main #welcome {
 
 .job-container {
   width: 80%;
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 20px auto;
-  text-align: center;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -320,87 +328,65 @@ main #welcome {
 
 /* Job Box */
 .job-box {
-  background: white;
+  background-color: #fff;
+  width: 80%;
+  display: flex;
+  gap: 2rem;
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.logo-container {
+  background: #f3f2f1;
+  flex: 0 0 150px;
+  padding: 20px 20px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 350px; /* Setiap job box memiliki lebar maksimum */
-  transition: transform 0.3s ease;
-}
-
-.job-box:hover {
-  transform: translateY(-5px);
-}
-
-/* Job Image */
-.job-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-/* Job Content */
-.job-content {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 20px;
-  text-align: center;
+  justify-content: center;
 }
 
-/* Company Logo */
-.company-logo {
-  width: 50px;
-  height: 50px;
+.logo-container img {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
   border-radius: 50%;
-  margin-bottom: 10px;
+  border: 2px solid #ccc;
 }
 
-/* Job Title */
-.job-title {
-  font-size: 1.4em;
-  margin: 10px 0;
+.job-details {
+  flex: 1;
+}
+
+.job-details h2 {
+  margin: 0;
   color: #333;
 }
 
-/* Job Description */
-.job-desc {
-  font-size: 0.9em;
+.company-name,
+.location,
+.salary {
+  margin: 0.5rem 0;
   color: #555;
-  margin-bottom: 10px;
-  text-justify: inter-word;
-}
-/* Job Location */
-.job-location {
-  font-size: 1.1em;
-  color: #6a6a6a;
-  margin-bottom: 10px;
-}
-/* Job Salary */
-.job-salary {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #27ae60;
 }
 
-/* Job Status */
-.job-status {
-  display: inline-block;
-  padding: 6px 12px;
-  font-size: 0.9em;
-  font-weight: bold;
-  border-radius: 20px;
-  color: white;
-  background-color: cadetblue;
-  margin-top: 10px;
+.description {
+  margin: 1rem 0;
+  color: #444;
 }
-.job-date {
-  font-size: 0.8em;
-  color: #999;
-  margin-top: 5px;
+
+.requirements {
+  margin-top: 1rem;
+}
+
+.requirements ul {
+  padding-left: 1.2rem;
+}
+
+.requirements li {
+  margin-bottom: 0.5rem;
 }
 .btn-detail {
   display: inline-flex;
@@ -424,6 +410,26 @@ main #welcome {
 .btn-detail img {
   width: 20px; /* Ukuran ikon lebih kecil */
   height: auto;
+}
+.btn-apply {
+  position: relative;
+  top:23vw;
+  left: 2vw;
+  display: inline-flex;
+  align-items: center;
+  background-color: #0c4bbf;
+  color: #f3f2f1;
+  text-decoration: none;
+  margin: 10px 50px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  gap: 10px; /* Jarak antara ikon dan teks */
+  transition: 0.3s ease-in-out;
+}
+.btn-apply:hover {
+  color: #f3f2f1;
+  background-color: #27ae60;
+  font-weight: bold;
 }
 
 /* Responsiveness */

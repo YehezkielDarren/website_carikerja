@@ -84,6 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="script/script.js"></script>
 </head>
 <body>
+    <header>
+      <div class="logo">
+        <img src="img/LogoHeader1.png" alt="logokerja" />
+        <a>Cari Kerja. <span class="small">com</span></a>
+      </div>
+      
+    </header>
     <main>
         <div class="wrapper">
             <div class="alert alert-danger" style="display: <?= empty($pesan) ? 'none' : 'block'; ?>;">

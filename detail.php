@@ -22,7 +22,7 @@
         exit();
     }
     $data = mysqli_fetch_assoc($result);
-
+    $syarat = explode("; ", $data['syarat']);
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +30,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/index.css" />
+    <link rel="stylesheet" href="style/detail.css" />
     <link rel="stylesheet" href="style/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
     <script src="script/time.js"></script>
@@ -83,19 +83,31 @@
       </section>
       <section class="job-container" style="justify-content: center;">
         <div class="job-box">
-          <img src="<?= htmlspecialchars($data['logo']) ?>" class="job-image" alt="Logo Perusahaan"/>
-          <div class="job-content">
-            <h2 class="job-title"><?= htmlspecialchars($data['nama_pekerjaan']) ?></h2>
-            <h3 class="job-company"><?= htmlspecialchars($data['nama_perusahaan']) ?></h3>
-            <p class="job-location">📍 <?= htmlspecialchars($data['lokasi']) ?></p>
-            <p class="job-desc"><?= nl2br(htmlspecialchars($data['deskripsi'])) ?></p>
-            <p class="job-salary">💰 <?= htmlspecialchars($data['gaji']) ?></p>
-            <p class="job-date">Batas Lamaran: <?= htmlspecialchars(formatTanggal($data['tanggal_batas'])) ?></p>
-            <p class="job-syarat"><strong>Syarat:</strong><br><?= nl2br(htmlspecialchars($data['syarat'])) ?></p>
-            <div class="status" style="margin-top: 15px;">
-              <p class="job-status"><?= $data['jenis_pekerjaan'] ?></p>
-              <p class="job-status"><?= $data['kategori'] ?></p>
+          <div class="logo-container">
+            <img src="<?php echo htmlspecialchars($data['logo']); ?>" alt="Logo Perusahaan">
+          </div>
+          <div class="job-details">
+            <h1><?php echo htmlspecialchars($data['nama_pekerjaan']); ?></h1>
+            <p class="company-name"><?php echo htmlspecialchars($data["nama_perusahaan"]); ?></p>
+            <p class="location">📍<?php echo htmlspecialchars($data['lokasi']); ?></p>
+            <p class="salary">💰<?php echo htmlspecialchars($data['gaji']); ?></p>
+  
+            <div class="description">
+              <h2>Deskripsi Pekerjaan</h2>
+              <p><?php echo nl2br(htmlspecialchars($data['deskripsi'])); ?></p>
             </div>
+  
+            <div class="requirements">
+              <h4>Syarat Pekerjaan:</h4>
+              <ul>
+                <?php foreach ($syarat as $item): ?>
+                  <li><?php echo htmlspecialchars(trim($item)); ?></li>
+                <?php endforeach; ?>
+              </ul>
+            </div>
+          </div>
+          <div class="button-apply">
+            <a href="apply.php?id=<?php echo htmlspecialchars($data['id']); ?>" class="btn-apply">Lamar Sekarang</a>
           </div>
         </div>
       </section>

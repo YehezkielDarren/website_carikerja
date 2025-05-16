@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="script/time.js"></script>
 </head>
 <body>
-<header>
+    <header>
       <div class="logo">
         <img src="img/LogoHeader1.png" alt="logokerja" />
         <a>Cari Kerja. <span class="small">com</span></a>
