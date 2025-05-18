@@ -199,7 +199,7 @@
       <section id="welcome">
         <div class="breadcrumb-bar">
           <div class="breadcrumb-text">
-            <?= generateBreadcrumb(); ?>
+            <a href="#">Home</a>
           </div>
         </div>
         <?php

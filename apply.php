@@ -10,6 +10,17 @@
         header("Location: index.php?pesan=$pesan");
         exit();
     }
+    // Cek apakah sudah login
+    if (!isset($_SESSION['username']) || ! isset($_SESSION['role'])) {
+        header("Location: login.php");
+        exit();
+    }
+    // Cek apakah role adalah pencari kerja
+    if ($_SESSION['role'] !== 'pencari_kerja') {
+        header("Location: dashboard-company.php");
+        exit();
+    }
+    // menampilkan data lowongan berdasarkan id
     $query = "SELECT lowongan.* , perusahaan.nama_perusahaan,
     perusahaan.logo FROM lowongan JOIN perusahaan ON lowongan.perusahaan_id = perusahaan.id WHERE lowongan.id = ?";
     $stmt = mysqli_prepare($conn, $query);
@@ -21,18 +32,6 @@
         header("Location: index.php?pesan=$pesan");
         exit();
     }
-    $data = mysqli_fetch_assoc($result);
-    $syarat = explode("; ", $data['syarat']);
-    // cek apakah user sudah pernah melamar
-    $lamar = false;
-    $query = "SELECT * FROM lamaran WHERE pencari_kerja_id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    if ($result && mysqli_num_rows($result) > 0) {
-        $lamar = true;
-    }
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +39,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/detail.css" />
+    <link rel="stylesheet" href="style/apply.css" />
     <link rel="stylesheet" href="style/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
     <script src="script/time.js"></script>
@@ -88,43 +87,67 @@
           <div class="breadcrumb-text">
             <?= generateBreadcrumb(); ?>
           </div>
-          <a href="index.php" class="btn-back">Kembali</a>
+          <a href="detail.php" class="btn-back">Kembali</a>
         </div>
       </section>
-      <section class="job-container" style="justify-content: center;">
-        <div class="job-box">
-          <div class="logo-container">
-            <img src="<?php echo htmlspecialchars($data['logo']); ?>" alt="Logo Perusahaan">
-          </div>
-          <div class="job-details">
-            <h1><?php echo htmlspecialchars($data['nama_pekerjaan']); ?></h1>
-            <p class="company-name"><?php echo htmlspecialchars($data["nama_perusahaan"]); ?></p>
-            <p class="location">📍<?php echo htmlspecialchars($data['lokasi']); ?></p>
-            <p class="salary">💰<?php echo htmlspecialchars($data['gaji']); ?></p>
-  
-            <div class="description">
-              <h2>Deskripsi Pekerjaan</h2>
-              <p><?php echo nl2br(htmlspecialchars($data['deskripsi'])); ?></p>
+      <section class="job-container">
+        <?php 
+            foreach ($result as $job): ?>
+          <div class="job-box">
+            <img
+              src="<?= htmlspecialchars($job['logo']) ?>"
+              class="job-image"
+              alt="<?= htmlspecialchars($job['nama_perusahaan']) ?>"
+            />
+            <div class="job-content">
+              <h2 class="job-title"><?= htmlspecialchars($job['nama_pekerjaan']) ?></h2>
+              <h2 class="job-company"><?= htmlspecialchars($job['nama_perusahaan']) ?></h2>
+              <p class="job-location">📍 <?= htmlspecialchars($job['lokasi']) ?></p>
+              <p class="job-desc"><?= htmlspecialchars(potongDeskripsi($job['deskripsi'],20)) ?></p>
+              <p class="job-salary">💰 <?= htmlspecialchars($job['gaji']) ?></p>
+              <p class="job-date">
+                <span class="tanggal">Tanggal Batas: <?= htmlspecialchars(formatTanggal($job['tanggal_batas'])) ?></span>
+              </p>
+              <div class="status">
+                <p class="job-status <?= strtolower($job['jenis_pekerjaan']) ?>"><?= $job['jenis_pekerjaan'] ?></p>
+                <p class="job-status <?= strtolower($job['kategori']) ?>"><?= $job['kategori'] ?></p>
+              </div>
             </div>
-            <div class="requirements">
-              <h4>Syarat Pekerjaan:</h4>
-              <ul>
-                <?php foreach ($syarat as $item): ?>
-                  <li><?php echo htmlspecialchars(trim($item)); ?></li>
-                <?php endforeach; ?>
-              </ul>
+          </div>
+        <?php endforeach; ?>
+      </section>
+      <section class="apply-section">
+          <h2>Apply Pekerjaan</h2>
+            <form action="apply.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="pencari_kerja_id" value="<?= htmlspecialchars($_SESSION['id']) ?>">
+            <input type="hidden" name="lowongan_id" value="<?= htmlspecialchars($id) ?>">
+
+            <div class="form-group">
+            <label for="nama_lengkap">Nama Lengkap</label>
+            <input type="text" id="nama_lengkap" name="nama_lengkap" required>
             </div>
-          </div>
-          <div>            
-            <?php if ($lamar==false){?>
-              <a href="apply.php?id=<?php echo htmlspecialchars($id); ?>" class="btn-apply">Lamar Sekarang</a>
-            <?php }else{?>
-          </div>
-          <div>
-            <a href="#" class="btn-alrapply">Anda Sudah Melamar</a>
-          </div>
-          <?php }?>
-        </div>
+            <div class="form-group">
+            <label for="tanggal_lahir">Tanggal Lahir</label>
+            <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+            </div>
+            <div class="form-group">
+            <label for="nomor_hp">Nomor HP</label>
+            <input type="number" id="nomor_hp" name="nomor_hp" required>
+            </div>
+            <div class="form-group">
+            <label for="cv">CV (PDF/DOCX)</label>
+            <input type="file" id="cv" name="cv" accept=".pdf,.docx" required>
+            </div>
+            <div class="form-group">
+            <label for="portofolio">Portofolio (PDF)</label>
+            <input type="file" id="portofolio" name="portofolio" accept=".pdf" required>
+            </div>
+            <div class="form-group">
+            <label for="surat_lamaran">Surat Lamaran</label>
+            <input type="file" id="surat_lamaran" name="surat_lamaran">
+            </div>
+            <button type="submit" class="btn-apply">Kirim Lamaran</button>
+          </form>
       </section>
     </main>
     <footer>
