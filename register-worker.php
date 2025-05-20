@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Register Pencari Kerja</title>
     <link rel="stylesheet" href="style/login.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <script src="script/script.js"></script>
 </head>
 <body>
@@ -115,7 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="input-box">
-                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="password" name="password"  id="password" placeholder="Password" required>
+                    <i class='bx bx-show toggle-password' onclick="showPassword()"></i>
                 </div>
 
                 <div class="foto">

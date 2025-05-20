@@ -2,7 +2,7 @@
     session_start();
     require_once 'connection.php';
     $pesan = "";
-    $id = $_GET['id'] ?? "";
+    $id = $_GET['id'] ?? ""; // id lowongan pekerjaan
     $nama = $_SESSION['username'] ?? "";
     $logo = $_SESSION['logo'] ?? "";
     if (empty($id)) {
@@ -27,7 +27,7 @@
     $lamar = false;
     $query = "SELECT * FROM lamaran WHERE pencari_kerja_id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_bind_param($stmt, "i", $_SESSION['id']);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if ($result && mysqli_num_rows($result) > 0) {

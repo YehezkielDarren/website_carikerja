@@ -19,3 +19,18 @@ function showAlert(message) {
 function closeAlert() {
   document.getElementById("customAlert").classList.remove("show");
 }
+
+function showPassword() {
+  const passwordInput = document.getElementById("password");
+  const toggleIcon = document.querySelector(".toggle-password");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleIcon.classList.remove("bx-show");
+    toggleIcon.classList.add("bx-hide");
+  } else {
+    passwordInput.type = "password";
+    toggleIcon.classList.remove("bx-hide");
+    toggleIcon.classList.add("bx-show");
+  }
+}

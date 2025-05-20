@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result); // Ambil 1x saja
         $_SESSION['role'] = $row['role'];
+        $_SESSION['user_id']=$row['id'];
         
 
         if ($_SESSION['role'] == 'perusahaan') {
@@ -31,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result2 = mysqli_stmt_get_result($stmt);
             if ($row2 = mysqli_fetch_assoc($result2)) {
                 $_SESSION['username'] = $row2['nama_perusahaan'];
-                $_SESSION['id'] = $row2['id'];
                 $_SESSION['logo'] = $row2['logo'];
+                $_SESSION['id'] = $row2['id'];
             }
             header("Location: dashboard-company.php");
             exit();
@@ -45,16 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result2 = mysqli_stmt_get_result($stmt);
             if ($row2 = mysqli_fetch_assoc($result2)) {
                 $_SESSION['username'] = $row2['nama_lengkap'];
-                $_SESSION['id'] = $row2['id'];
                 $_SESSION['logo'] = $row2['foto'];
+                $_SESSION['id'] = $row2['id'];
             }
             header("Location: index.php");
             exit();
         }
     } else {
         $pesan = "Username atau password salah!";
-    }
-    
+    }    
 }
 ?>
 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="input-box">
                     <input type="password" name="password" id="password" placeholder="Password">
-                    <i class='bx bx-lock-alt'></i>
+                    <i class='bx bx-show toggle-password' onclick="showPassword()"></i>
                 </div>
 
                 <button type="submit" class="btn" onclick="">Login</button>

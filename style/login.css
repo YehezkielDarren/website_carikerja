@@ -191,7 +191,15 @@ main {
 .register-link a:hover {
   text-decoration: underline;
 }
-
+.toggle-password {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #ddd;
+  cursor: pointer;
+}
 /* Alert styling */
 .alert {
   padding: 12px 20px;

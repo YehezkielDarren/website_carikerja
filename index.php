@@ -6,6 +6,9 @@
     header("Location: dashboard-company.php");
     exit();
   }
+  $pesan_gagal_apply = isset($_SESSION['gagal_apply']) ? $_SESSION['gagal_apply'] : '';
+  $pesan_apply = isset($_SESSION['apply']) ? $_SESSION['apply'] : '';
+  $pesan = "";
   $sql = "SELECT 
             lowongan.id AS lowongan_id,
             lowongan.nama_pekerjaan,
@@ -210,6 +213,12 @@
       </section>
       <section class="alert alert-danger" id="errorMsg" style="display: <?= empty($pesan) ? 'none' : 'block'; ?>;">
         <p><?= htmlspecialchars($pesan); ?></p>
+      </section>
+      <section class="alert alert-danger" id="errorMsg" style="display: <?= empty($pesan_gagal_apply) ? 'none' : 'block'; ?>;">
+        <p><?= htmlspecialchars($pesan_gagal_apply); ?></p>
+      </section>
+      <section class="alert alert-danger" id="errorMsg" style="display: <?= empty($pesan_apply) ? 'none' : 'block'; ?>;">
+        <p><?= htmlspecialchars($pesan_apply); ?></p>
       </section>
       <section id="announcement-title">
         <div class="announcement-title">

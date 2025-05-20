@@ -33,7 +33,7 @@
       $jobList[] = $row;
     }
   } else {
-    $pesan_kosong = "Tidak ada lowongan yang tersedia.";
+    $pesan_kosong = "Anda belum membuat lowongan kerja.";
   }
   $jobListFilter = [];
   if (isset($_GET['submit_judul']) || isset($_GET['submit_filter'])) {
@@ -206,6 +206,7 @@
           }
         ?>
       </section>
+      <?php if(mysqli_num_rows($result)==0) : ?>
       <section class="job-container">
       <?php 
             foreach ($jobListFilter as $job): ?>
@@ -237,6 +238,7 @@
           </div>
         <?php endforeach; ?>
       </section>
+      <?php endif;?>
       <div id="tampilPelamar" class="custom-alert">
         <h2>List Pelamar</h2>
         <div id="alertMessage"></div>
