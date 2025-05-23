@@ -7,7 +7,8 @@
     exit();
   }
   $pesan_gagal_apply = isset($_SESSION['gagal_apply']) ? $_SESSION['gagal_apply'] : '';
-  $pesan_apply = isset($_SESSION['apply']) ? $_SESSION['apply'] : '';
+  // $pesan_apply = isset($_SESSION['apply']) ? $_SESSION['apply'] : '';
+  $apply_succes_message= (isset($_GET['apply_status']) && $_GET['apply_status'] === 'success') ? 'Apply Lamaran Berhasil Dilakukan!' : '';
   $pesan = "";
   $sql = "SELECT 
             lowongan.id AS lowongan_id,
@@ -217,8 +218,8 @@
       <section class="alert alert-danger" id="errorMsg" style="display: <?= empty($pesan_gagal_apply) ? 'none' : 'block'; ?>;">
         <p><?= htmlspecialchars($pesan_gagal_apply); ?></p>
       </section>
-      <section class="alert alert-danger" id="errorMsg" style="display: <?= empty($pesan_apply) ? 'none' : 'block'; ?>;">
-        <p><?= htmlspecialchars($pesan_apply); ?></p>
+      <section class="alert alert-succes" id="successMsg" style="display: <?= empty($apply_succes_message) ? 'none' : 'block'; ?>;">
+        <p><?= htmlspecialchars($apply_succes_message); ?></p>
       </section>
       <section id="announcement-title">
         <div class="announcement-title">

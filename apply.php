@@ -85,8 +85,7 @@
           mysqli_stmt_bind_param($stmt2, "isssssss", $_POST['lowongan_id'], $nama_lengkap, $tanggal_lahir, $email, $no_hp, $cvResult['path'], $portofolioPath, $suratPath);
           
           if (mysqli_stmt_execute($stmt2)) {
-              $_SESSION['apply'] = "Apply Lamaran Berhasil Dilakukan";
-              header("Location: index.php");
+              header("Location: index.php?pesan_apply=success");
               exit();
           } else {
               $pesan = "Gagal menyimpan lamaran: " . mysqli_error($conn);
