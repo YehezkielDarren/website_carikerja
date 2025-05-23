@@ -25,9 +25,9 @@
     $syarat = explode("; ", $data['syarat']);
     // cek apakah user sudah pernah melamar
     $lamar = false;
-    $query = "SELECT * FROM lamaran WHERE pencari_kerja_id = ?";
+    $query = "SELECT * FROM lamaran WHERE nama_lengkap= ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $_SESSION['id']);
+    mysqli_stmt_bind_param($stmt, "i", $_SESSION['username']);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if ($result && mysqli_num_rows($result) > 0) {

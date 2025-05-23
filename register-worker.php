@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Register Pencari Kerja</title>
     <link rel="stylesheet" href="style/login.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
     <script src="script/script.js"></script>
 </head>
 <body>

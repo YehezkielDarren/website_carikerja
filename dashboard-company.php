@@ -21,7 +21,7 @@
           perusahaan.logo
       FROM lowongan
       JOIN perusahaan ON lowongan.perusahaan_id = perusahaan.id
-      where tanggal_batas > now() and lowongan.perusahaan_id = '$user_id'
+      where (tanggal_batas > now() and lowongan.perusahaan_id = '$user_id')
       ORder by tanggal_batas DESC";
 
   $result = mysqli_query($conn, $sql);
@@ -206,7 +206,7 @@
           }
         ?>
       </section>
-      <?php if(mysqli_num_rows($result)==0) : ?>
+      <?php if(mysqli_num_rows($result)>0) : ?>
       <section class="job-container">
       <?php 
             foreach ($jobListFilter as $job): ?>
