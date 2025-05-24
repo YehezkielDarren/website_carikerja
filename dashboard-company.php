@@ -93,6 +93,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style/dashboard-company.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="style/footer.css" />
+    <!-- <script src="script/search-filter.js" defer></script> Hapus defer jika ada masalah timing -->
     <title>Home - Cari Kerja.com</title>
   </head>
   <body>
@@ -137,11 +139,13 @@
             <input
               type="text"
               class="search-input"
+              id="search-job-title-input"
+              name="search_kerja"
               placeholder="Judul Pekerjaan"
-              required
             />
-            <button type="submit" class="search-button">Cari</button>
+            <button name="submit_judul" type="submit" class="search-button">Cari</button>
           </div>
+          <div id="search-job-title-error" class="search-error-message" style="display: none;"></div>
         </form>
       </div>
       <div class="filter-container">
@@ -246,8 +250,15 @@
     </div>
     </main>
     <footer>
-      <p>&copy 2025 Cari Kerja.com</p>
+      <p>&copy; 2025 Cari Kerja.com</p>
+      <p class="creators">
+        Created by:
+        <a href="#" target="_blank">Yehezkiel Darren/71231023</a> |
+        <a href="#" target="_blank">Phillip Derric Kho/71231002</a> |
+        <a href="#" target="_blank">Syendhi Reswara/71231061</a>
+      </p>
     </footer>
+    <script src="script/search-filter.js"></script>
   </body>
 </html>
 <?php

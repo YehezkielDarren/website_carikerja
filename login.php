@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style/time.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="style/footer.css" />
     <script src="script/script.js"></script>
     <script src="script/time.js"></script>
 </head>
@@ -111,5 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="clock-time" id="clock">00:00:00</div>
       <div class="clock-date" id="date">Loading date...</div>
     </div>
+    <footer>
+      <p>&copy; 2025 Cari Kerja.com</p>
+      <p class="creators">
+        Created by:
+        <a href="#" target="_blank">Yehezkiel Darren/71231023</a> |
+        <a href="#" target="_blank">Phillip Derric Kho/71231002</a> |
+        <a href="#" target="_blank">Syendhi Reswara/71231061</a>
+      </p>
+    </footer>
 </body>
 </html>

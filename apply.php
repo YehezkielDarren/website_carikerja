@@ -20,81 +20,97 @@
   }
   
   // cek apakah sudah apply
-
-  
+  $sql_cek_apply = "SELECT * FROM lamaran WHERE lowongan_id = ? AND nama_lengkap = ?";
+  $stmt_cek_apply = mysqli_prepare($conn, $sql_cek_apply);
+  mysqli_stmt_bind_param($stmt_cek_apply, "is", $id, $nama);
+  mysqli_stmt_execute($stmt_cek_apply);
+  $result_cek_apply = mysqli_stmt_get_result($stmt_cek_apply);
+  if (mysqli_num_rows($result_cek_apply) > 0) {
+    header("Location: index.php?apply_status=gagal");
+    exit();
+  } 
 
   // innput data apply ke database
   if (isset($_POST['submit'])) {
-    $cv = $_FILES['cv']['name'];
-    $portofolio = $_FILES['portofolio']['name'];
-    $surat_lamaran = $_FILES['surat_lamaran']['name'];
-    // validasi ukuran file cv
-    $uploadOk = true;
-    if ($cv!=""){
-      if ($_FILES['cv']['size']>5000000){
-          $pesan_cv="Ukuran File cv terlalu besar";
-          $uploadOk=false;
-      }
+    $raw_nama_lengkap = $_POST['nama_lengkap'] ?? 'pelamar';
+    $safe_nama_pelamar = str_replace(' ', '_', $raw_nama_lengkap);
+    $safe_nama_pelamar = preg_replace('/[^A-Za-z0-9_]/', '', $safe_nama_pelamar);
+    if (empty($safe_nama_pelamar)) {
+        $safe_nama_pelamar = 'pelamar'; // Fallback jika nama menjadi kosong setelah sanitasi
     }
-    // validasi ukuran file portofolio"
-    if ($portofolio!=""){
-      if ($_FILES['portofolio']['size']>5000000){
-          $pesan_portofolio="Ukuran File portofolio terlalu besar";
-          $uploadOk=false;
-      }
-    } 
-    // validasi ukuran file surat lamaran
-    if ($surat_lamaran!=""){
-      if ($_FILES['surat_lamaran']['size']>5000000){
-          $pesan_surat_lamaran="Ukuran File surat lamaran terlalu besar";
-          $uploadOk=false;
-      }
+
+    $nama_lengkap_db = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
+    $tanggal_lahir_db = mysqli_real_escape_string($conn, $_POST['tanggal_lahir']);
+    $email_db = mysqli_real_escape_string($conn, $_POST['email']);
+    $no_hp_db = mysqli_real_escape_string($conn, $_POST['nomor_hp']);
+    // $tanggal_lamaran = getTanggalSekarang(); // Variabel ini tidak digunakan di query INSERT
+
+    // Simpan file CV (wajib)
+    $cvResult = ['status' => false, 'message' => 'CV wajib diunggah.', 'path' => null];
+    if (!empty($_FILES['cv']['name']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
+        $cvExtension = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));
+        $cvFilename = "cv_" . $safe_nama_pelamar . "." . $cvExtension;
+        $cvResult = simpanFile($_FILES['cv'], 5000000, $cvFilename);
+        if (!$cvResult['status']) $pesan_cv = $cvResult['message'];
+    } elseif (!empty($_FILES['cv']['name']) && $_FILES['cv']['error'] !== UPLOAD_ERR_OK) {
+        $pesan_cv = getUploadErrorMessage($_FILES['cv']['error']);
+    } else { // Jika nama file kosong atau ada error UPLOAD_ERR_NO_FILE (meskipun CV required)
+        $pesan_cv = "CV wajib diunggah dan tidak boleh kosong.";
     }
-    if ($uploadOk) {
-      $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
-      $tanggal_lahir = mysqli_real_escape_string($conn, $_POST['tanggal_lahir']);
-      $email = mysqli_real_escape_string($conn, $_POST['email']);
-      $no_hp = mysqli_real_escape_string($conn, $_POST['nomor_hp']);
-      $tanggal_lamaran = getTanggalSekarang();
-  
-      // Simpan file CV
-      $cvResult = simpanFile($_FILES['cv'], 5000000);
-      if (!$cvResult['status']) $pesan_cv = $cvResult['message'];
-  
-      // Simpan file portofolio jika ada
-      $portofolioPath = null;
-      if (!empty($_FILES['portofolio']['name'])) {
-          $portoResult = simpanFile($_FILES['portofolio'], 5000000);
-          if (!$portoResult['status']) $pesan_portofolio = $portoResult['message'];
-          else $portofolioPath = $portoResult['path'];
-      }
-  
-      // Simpan file surat lamaran jika ada
-      $suratPath = null;
-      if (!empty($_FILES['surat_lamaran']['name'])) {
-          $suratResult = simpanFile($_FILES['surat_lamaran'], 5000000);
-          if (!$suratResult['status']) $pesan_surat_lamaran = $suratResult['message'];
-          else $suratPath = $suratResult['path'];
-      }
-  
-      // Jika semua file valid
-      if ($cvResult['status'] && ($portoResult['status'] ?? true) && ($suratResult['status'] ?? true)) {
-          $query2 = "INSERT INTO lamaran (lowongan_id, nama_lengkap, tanggal_lahir, email, no_hp, cv, portofolio, surat_lamaran)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-          $stmt2 = mysqli_prepare($conn, $query2);
-          mysqli_stmt_bind_param($stmt2, "isssssss", $_POST['lowongan_id'], $nama_lengkap, $tanggal_lahir, $email, $no_hp, $cvResult['path'], $portofolioPath, $suratPath);
-          
-          if (mysqli_stmt_execute($stmt2)) {
-              header("Location: index.php?pesan_apply=success");
-              exit();
-          } else {
-              $pesan = "Gagal menyimpan lamaran: " . mysqli_error($conn);
-          }
-      } else {
-          $pesan = "Gagal menyimpan file. Periksa kembali file yang diunggah.";
+
+    // Simpan file portofolio jika ada (opsional)
+    $portofolioPath = null;
+    $portoResult = ['status' => true]; // Anggap sukses jika opsional dan tidak diunggah
+    if (!empty($_FILES['portofolio']['name'])) {
+        if ($_FILES['portofolio']['error'] === UPLOAD_ERR_OK) {
+            $portoExtension = strtolower(pathinfo($_FILES['portofolio']['name'], PATHINFO_EXTENSION));
+            $portoFilename = "portofolio_" . $safe_nama_pelamar . "." . $portoExtension;
+            $portoResult = simpanFile($_FILES['portofolio'], 5000000, $portoFilename);
+            if (!$portoResult['status']) $pesan_portofolio = $portoResult['message'];
+            else $portofolioPath = $portoResult['path'];
+        } else {
+            $pesan_portofolio = getUploadErrorMessage($_FILES['portofolio']['error']);
+            $portoResult['status'] = false;
         }
-      }
-  }
+    }
+
+    // Simpan file surat lamaran jika ada (opsional)
+    $suratPath = null;
+    $suratResult = ['status' => true]; // Anggap sukses jika opsional dan tidak diunggah
+    if (!empty($_FILES['surat_lamaran']['name'])) {
+        if ($_FILES['surat_lamaran']['error'] === UPLOAD_ERR_OK) {
+            $suratExtension = strtolower(pathinfo($_FILES['surat_lamaran']['name'], PATHINFO_EXTENSION));
+            $suratFilename = "lamaran_" . $safe_nama_pelamar . "." . $suratExtension;
+            $suratResult = simpanFile($_FILES['surat_lamaran'], 5000000, $suratFilename);
+            if (!$suratResult['status']) $pesan_surat_lamaran = $suratResult['message'];
+            else $suratPath = $suratResult['path'];
+        } else {
+            $pesan_surat_lamaran = getUploadErrorMessage($_FILES['surat_lamaran']['error']);
+            $suratResult['status'] = false;
+        }
+    }
+
+    // Jika semua file yang diunggah (atau wajib) valid
+    if ($cvResult['status'] && $portoResult['status'] && $suratResult['status']) {
+        $query2 = "INSERT INTO lamaran (lowongan_id, pelamar_id, nama_lengkap, tanggal_lahir, email, no_hp, cv, portofolio, surat_lamaran)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt2 = mysqli_prepare($conn, $query2);
+        mysqli_stmt_bind_param($stmt2, "isssssss", $_POST['lowongan_id'],$_POST['pelamar_id'], $nama_lengkap_db, $tanggal_lahir_db, $email_db, $no_hp_db, $cvResult['path'], $portofolioPath, $suratPath);
+        
+        if (mysqli_stmt_execute($stmt2)) {
+            header("Location: index.php?apply_status=success"); // Menggunakan apply_status sesuai index.php
+            exit();
+        } else {
+            $pesan = "Gagal menyimpan lamaran: " . mysqli_error($conn);
+        }
+    } else {
+        // Pesan umum jika ada file yang gagal diunggah, pesan spesifik sudah diatur
+        if (empty($pesan)) { // Hanya set pesan umum jika belum ada pesan error spesifik dari DB
+             $pesan = "Gagal menyimpan file. Periksa kembali file yang diunggah dan pesan error di atas.";
+        }
+    }
+}
+      
   
   // menampilkan data lowongan berdasarkan id
   $query = "SELECT lowongan.* , perusahaan.nama_perusahaan,
@@ -126,6 +142,7 @@
     <link rel="stylesheet" href="style/apply.css" />
     <link rel="stylesheet" href="style/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="style/footer.css" />
     <script src="script/time.js"></script>
     <title>Apply - Cari Kerja.com</title>
   </head>
@@ -252,7 +269,13 @@
       </section>
     </main>
     <footer>
-      <p>&copy 2025 Cari Kerja.com</p>
+      <p>&copy; 2025 Cari Kerja.com</p>
+      <p class="creators">
+        Created by:
+        <a href="#" target="_blank">Yehezkiel Darren/71231023</a> |
+        <a href="#" target="_blank">Phillip Derric Kho/71231002</a> |
+        <a href="#" target="_blank">Syendhi Reswara/71231061</a>
+      </p>
     </footer>
   </body>
 </html>
@@ -300,9 +323,9 @@
     return date('Y-m-d'); // contoh output: 2025-05-18
   }
 
-  function simpanFile($file, $maxSize) {
+  function simpanFile($file, $maxSize,$desiredFilename) {
     if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
-        return ['status' => false, 'message' => 'Upload gagal.', 'path' => null];
+      return ['status' => false, 'message' => getUploadErrorMessage($file['error'] ?? UPLOAD_ERR_NO_FILE), 'path' => null];
     }
 
     if ($file['size'] > $maxSize) {
@@ -314,13 +337,35 @@
         mkdir($targetDir, 0755, true);
     }
 
-    $filename = uniqid() . '_' . basename($file['name']);
-    $targetPath = $targetDir . $filename;
+    $targetPath = $targetDir . $desiredFilename; // mengubah nama file
 
     if (move_uploaded_file($file['tmp_name'], $targetPath)) {
         return ['status' => true, 'message' => 'File berhasil disimpan.', 'path' => $targetPath];
     } else {
         return ['status' => false, 'message' => 'Gagal menyimpan file.', 'path' => null];
+    }
+  }
+
+    function getUploadErrorMessage($errorCode) {
+    switch ($errorCode) {
+      case UPLOAD_ERR_OK:
+        return ''; // Tidak ada error
+      case UPLOAD_ERR_INI_SIZE:
+          return "Ukuran file melebihi batas unggah server (php.ini directive).";
+      case UPLOAD_ERR_FORM_SIZE:
+          return "Ukuran file melebihi batas yang ditentukan dalam form HTML.";
+      case UPLOAD_ERR_PARTIAL:
+          return "File hanya terunggah sebagian.";
+      case UPLOAD_ERR_NO_FILE:
+          return "Tidak ada file yang diunggah.";
+      case UPLOAD_ERR_NO_TMP_DIR:
+          return "Folder sementara untuk unggahan tidak ditemukan.";
+      case UPLOAD_ERR_CANT_WRITE:
+          return "Gagal menulis file ke disk.";
+      case UPLOAD_ERR_EXTENSION:
+          return "Unggahan file dihentikan oleh ekstensi PHP.";
+      default:
+          return "Terjadi error tidak diketahui saat unggah file.";
     }
   }
 ?>

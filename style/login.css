@@ -287,3 +287,29 @@ main {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
+/* footer */
+footer {
+  background-color: #333; /* Warna latar belakang footer */
+  color: white; /* Warna teks default di footer */
+  text-align: center;
+  padding: 20px 15px; /* Padding atas/bawah dan kiri/kanan */
+  margin-top: 30px; /* Memberi sedikit jarak dari konten di atasnya */
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+footer p {
+  margin: 8px 0; /* Jarak antar paragraf di footer */
+}
+
+footer .creators a {
+  color: #bbb; /* Warna link nama pembuat */
+  text-decoration: none;
+  margin: 0 5px; /* Jarak antar nama pembuat */
+}
+
+footer .creators a:hover {
+  color: #fff; /* Warna link saat di-hover */
+  text-decoration: underline;
+}

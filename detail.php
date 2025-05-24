@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="style/detail.css" />
     <link rel="stylesheet" href="style/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="style/footer.css" />
     <script src="script/time.js"></script>
     <title>Detail - Cari Kerja.com</title>
   </head>
@@ -128,7 +129,13 @@
       </section>
     </main>
     <footer>
-      <p>&copy 2025 Cari Kerja.com</p>
+      <p>&copy; 2025 Cari Kerja.com</p>
+      <p class="creators">
+        Created by:
+        <a href="#" target="_blank">Yehezkiel Darren/71231023</a> |
+        <a href="#" target="_blank">Phillip Derric Kho/71231002</a> |
+        <a href="#" target="_blank">Syendhi Reswara/71231061</a>
+      </p>
     </footer>
   </body>
 </html>

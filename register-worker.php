@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style/login.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="style/footer.css" />
     <script src="script/script.js"></script>
 </head>
 <body>
@@ -138,6 +139,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button onclick="closeAlert()">OK</button>
         </div>
     </main>
+    <footer>
+      <p>&copy; 2025 Cari Kerja.com</p>
+      <p class="creators">
+        Created by:
+        <a href="#" target="_blank">Yehezkiel Darren/71231023</a> |
+        <a href="#" target="_blank">Phillip Derric Kho/71231002</a> |
+        <a href="#" target="_blank">Syendhi Reswara/71231061</a>
+      </p>
+    </footer>
 </body>
 </html>
-

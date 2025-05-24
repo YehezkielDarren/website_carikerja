@@ -6,8 +6,7 @@
     header("Location: dashboard-company.php");
     exit();
   }
-  $pesan_gagal_apply = isset($_SESSION['gagal_apply']) ? $_SESSION['gagal_apply'] : '';
-  // $pesan_apply = isset($_SESSION['apply']) ? $_SESSION['apply'] : '';
+  $pesan_gagal_apply = (isset($_GET['apply_status']) && $_GET['apply_status'] === 'gagal') ? 'Anda Sudah Melamar Lowongan Ini Sebelumnya!' : '';
   $apply_succes_message= (isset($_GET['apply_status']) && $_GET['apply_status'] === 'success') ? 'Apply Lamaran Berhasil Dilakukan!' : '';
   $pesan = "";
   $sql = "SELECT 
@@ -95,6 +94,8 @@
     <link rel="stylesheet" href="style/index.css" />
     <link rel="stylesheet" href="style/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="style/footer.css" />
+    <!-- <script src="script/search-filter.js" defer></script> Hapus defer jika ada masalah timing -->
     <script src="script/time.js"></script>
     <title>Home - Cari Kerja.com</title>
   </head>
@@ -143,10 +144,12 @@
                 type="text"
                 class="search-input"
                 name="search_kerja"
+                id="search-job-title-input"
                 placeholder="Judul Pekerjaan"
               />
               <button name="submit_judul" type="submit" class="search-button">Cari</button>
             </div>
+            <div id="search-job-title-error" class="search-error-message" style="display: none;"></div>
           </form>
         </div>
         <div class="filter-container">
@@ -273,8 +276,15 @@
       </section>
     </main>
     <footer>
-      <p>&copy 2025 Cari Kerja.com</p>
+      <p>&copy; 2025 Cari Kerja.com</p>
+      <p class="creators">
+        Created by:
+        <a href="#" target="_blank">Yehezkiel Darren/71231023</a> |
+        <a href="#" target="_blank">Phillip Derric Kho/71231002</a> |
+        <a href="#" target="_blank">Syendhi Reswara/71231061</a>
+      </p>
     </footer>
+    <script src="script/search-filter.js"></script>
   </body>
 </html>
 <?php
