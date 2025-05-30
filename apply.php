@@ -8,11 +8,24 @@
   $id = $_GET['id'] ?? ""; // lowongan id 
   $nama = $_SESSION['username'] ?? ""; // username user
   $logo = $_SESSION['logo'] ?? "";
+  $id_pelamar = $_SESSION['id'] ?? "";
   // Cek apakah sudah login
   if (!isset($_SESSION['username']) || ! isset($_SESSION['role'])) {
       header("Location: login.php");
       exit();
   }
+  // cek apakah user sudah pernah melamar
+
+  $sql = "SELECT * FROM lamaran WHERE lowongan_id = ? AND pelamar_id = ?";
+  $stmt = mysqli_prepare($conn, $sql);
+  mysqli_stmt_bind_param($stmt, "ii", $id, $id_pelamar);
+  mysqli_stmt_execute($stmt);
+  $result = mysqli_stmt_get_result($stmt);
+  if (mysqli_num_rows($result) > 0) {
+    header("Location: index.php?apply_status=gagal");
+    exit();
+  }
+
   // Cek apakah role adalah pencari kerja
   if ($_SESSION['role'] !== 'pencari_kerja') {
       header("Location: dashboard-company.php");
@@ -50,10 +63,16 @@
     if (!empty($_FILES['cv']['name']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
         $cvExtension = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));
         $cvFilename = "cv_" . $safe_nama_pelamar . "." . $cvExtension;
-        $cvResult = simpanFile($_FILES['cv'], 5000000, $cvFilename);
+        $cvResult = simpanFile(
+          $_FILES['cv'],
+          5000000,
+          $cvFilename,
+          ['pdf', 'docx'],
+          ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+      );
         if (!$cvResult['status']) $pesan_cv = $cvResult['message'];
     } elseif (!empty($_FILES['cv']['name']) && $_FILES['cv']['error'] !== UPLOAD_ERR_OK) {
-        $pesan_cv = getUploadErrorMessage($_FILES['cv']['error']);
+        $pesan_cv = $cvResult['message'] ?? getUploadErrorMessage($_FILES['cv']['error']);
     } else { // Jika nama file kosong atau ada error UPLOAD_ERR_NO_FILE (meskipun CV required)
         $pesan_cv = "CV wajib diunggah dan tidak boleh kosong.";
     }
@@ -65,11 +84,17 @@
         if ($_FILES['portofolio']['error'] === UPLOAD_ERR_OK) {
             $portoExtension = strtolower(pathinfo($_FILES['portofolio']['name'], PATHINFO_EXTENSION));
             $portoFilename = "portofolio_" . $safe_nama_pelamar . "." . $portoExtension;
-            $portoResult = simpanFile($_FILES['portofolio'], 5000000, $portoFilename);
+            $portoResult = simpanFile(
+              $_FILES['portofolio'],
+              5000000,
+              $portoFilename,
+              ['pdf'],
+              ['application/pdf']
+          );
             if (!$portoResult['status']) $pesan_portofolio = $portoResult['message'];
             else $portofolioPath = $portoResult['path'];
         } else {
-            $pesan_portofolio = getUploadErrorMessage($_FILES['portofolio']['error']);
+            $pesan_portofolio = $portoResult['message'] ?? getUploadErrorMessage($_FILES['portofolio']['error']);
             $portoResult['status'] = false;
         }
     }
@@ -81,11 +106,17 @@
         if ($_FILES['surat_lamaran']['error'] === UPLOAD_ERR_OK) {
             $suratExtension = strtolower(pathinfo($_FILES['surat_lamaran']['name'], PATHINFO_EXTENSION));
             $suratFilename = "lamaran_" . $safe_nama_pelamar . "." . $suratExtension;
-            $suratResult = simpanFile($_FILES['surat_lamaran'], 5000000, $suratFilename);
+            $suratResult = simpanFile(
+              $_FILES['surat_lamaran'],
+              5000000,
+              $suratFilename,
+              ['pdf', 'docx'], // Izinkan PDF dan DOCX untuk surat lamaran
+              ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+          );
             if (!$suratResult['status']) $pesan_surat_lamaran = $suratResult['message'];
             else $suratPath = $suratResult['path'];
         } else {
-            $pesan_surat_lamaran = getUploadErrorMessage($_FILES['surat_lamaran']['error']);
+            $pesan_surat_lamaran = $suratResult['message'] ?? getUploadErrorMessage($_FILES['surat_lamaran']['error']);
             $suratResult['status'] = false;
         }
     }
@@ -93,9 +124,9 @@
     // Jika semua file yang diunggah (atau wajib) valid
     if ($cvResult['status'] && $portoResult['status'] && $suratResult['status']) {
         $query2 = "INSERT INTO lamaran (lowongan_id, pelamar_id, nama_lengkap, tanggal_lahir, email, no_hp, cv, portofolio, surat_lamaran)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                   VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt2 = mysqli_prepare($conn, $query2);
-        mysqli_stmt_bind_param($stmt2, "isssssss", $_POST['lowongan_id'],$_POST['pelamar_id'], $nama_lengkap_db, $tanggal_lahir_db, $email_db, $no_hp_db, $cvResult['path'], $portofolioPath, $suratPath);
+        mysqli_stmt_bind_param($stmt2, "iisssssss", $_POST['lowongan_id'],$_POST['pencari_kerja_id'], $nama_lengkap_db, $tanggal_lahir_db, $email_db, $no_hp_db, $cvResult['path'], $portofolioPath, $suratPath);
         
         if (mysqli_stmt_execute($stmt2)) {
             header("Location: index.php?apply_status=success"); // Menggunakan apply_status sesuai index.php
@@ -261,7 +292,7 @@
                 <?php endif;?>
                 <div class="form-group">
                   <label for="surat_lamaran">Surat Lamaran max 5 MB</label>
-                  <input type="file" id="surat_lamaran" name="surat_lamaran">
+                  <input type="file" id="surat_lamaran" name="surat_lamaran" accept=".pdf,.docx">
                 </div>
                 <button type="submit" name="submit" value="submit" class="btn-apply">Kirim Lamaran</button>
             </form>
@@ -323,13 +354,34 @@
     return date('Y-m-d'); // contoh output: 2025-05-18
   }
 
-  function simpanFile($file, $maxSize,$desiredFilename) {
+  function simpanFile($file, $maxSize,$desiredFilename, array $allowedExtensions, array $allowedMimeTypes) {
     if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
       return ['status' => false, 'message' => getUploadErrorMessage($file['error'] ?? UPLOAD_ERR_NO_FILE), 'path' => null];
     }
 
     if ($file['size'] > $maxSize) {
         return ['status' => false, 'message' => 'Ukuran file terlalu besar.', 'path' => null];
+    }
+
+    $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($fileExtension, $allowedExtensions)) {
+        return ['status' => false, 'message' => 'Jenis file tidak diizinkan. Hanya file dengan ekstensi: ' . implode(', ', $allowedExtensions) . ' yang diperbolehkan.', 'path' => null];
+    }
+
+    // Validasi MIME type
+    $mimeType = '';
+    if (function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+    } elseif (function_exists('mime_content_type')) {
+        $mimeType = mime_content_type($file['tmp_name']);
+    } else {
+        return ['status' => false, 'message' => 'Tidak dapat memverifikasi tipe file (fungsi MIME tidak tersedia).', 'path' => null];
+    }
+
+    if (!in_array($mimeType, $allowedMimeTypes)) {
+        return ['status' => false, 'message' => 'Tipe file (MIME) tidak valid (' . htmlspecialchars($mimeType) . '). Pastikan file tidak korup dan sesuai dengan ekstensinya.', 'path' => null];
     }
 
     $targetDir = 'uploads/';

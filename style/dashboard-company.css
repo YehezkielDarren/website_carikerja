@@ -1,13 +1,3 @@
-/* keyframes */
-@keyframes marquee {
-  from {
-    transform: translateX(100vw);
-  }
-  to {
-    transform: translateX(-100vw);
-  }
-}
-
 /* css tag */
 * {
   font-family: "IBM Plex Sans", sans-serif;
@@ -210,6 +200,13 @@ main {
   min-height: 100vh;
   width: 100%;
 }
+/* Layout untuk dashboard */
+.dashboard-layout {
+  display: flex;
+  flex-wrap: wrap; /* Memungkinkan wrap jika layar terlalu kecil */
+  gap: 20px; /* Jarak antara kolom kiri dan kanan */
+  padding: 20px; /* Padding untuk keseluruhan layout */
+}
 main #welcome {
   font-weight: bolder;
   padding-bottom: 10px;
@@ -243,23 +240,6 @@ main #welcome {
 .breadcrumb a {
   text-decoration: none;
   color: #0c4bbf;
-}
-/* container pengumuman */
-.announcement-container {
-  overflow: hidden;
-  background: linear-gradient(to right, #1f1c2c, #928dab);
-  padding: 10px;
-  display: flex;
-}
-#announcement-title {
-  padding: 5px;
-  padding-left: 25px;
-  background: linear-gradient(to right, #f3f2f1, #928dab);
-}
-.announcement-title p {
-  color: #24262b;
-  font-weight: bold;
-  text-transform: uppercase;
 }
 .box-pengumuman {
   border-radius: 3px;
@@ -418,7 +398,7 @@ main #welcome {
 
 /* bagian footer */
 footer {
-  background-color: #333; /* Warna latar belakang footer */
+  background: linear-gradient(to right, #1f1c2c, #928dab); /* Warna latar belakang footer */
   color: white; /* Warna teks default di footer */
   text-align: center;
   padding: 20px 15px; /* Padding atas/bawah dan kiri/kanan */
@@ -490,4 +470,96 @@ footer .creators a:hover {
 .btn-action:hover {
   opacity: 0.85;
   transform: scale(1.05);
+}
+
+/* Kolom daftar lowongan (kiri) */
+.job-listings-column {
+  flex: 2; /* Mengambil 2 bagian dari ruang yang tersedia */
+  min-width: 300px; /* Lebar minimum sebelum wrap */
+}
+
+/* Kolom form tambah lowongan (kanan) */
+.add-job-column {
+  flex: 1; /* Mengambil 1 bagian dari ruang yang tersedia */
+  min-width: 300px; /* Lebar minimum sebelum wrap */
+}
+
+.add-job-form-container {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  height: fit-content; 
+}
+
+.add-job-form-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 1.7em;
+  font-weight: 600;
+}
+
+.add-job-form-container .form-group {
+  margin-bottom: 18px;
+}
+
+.add-job-form-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #454545;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.add-job-form-container input[type="text"],
+.add-job-form-container input[type="date"],
+.add-job-form-container select,
+.add-job-form-container textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-job-form-container input[type="text"]:focus,
+.add-job-form-container input[type="date"]:focus,
+.add-job-form-container select:focus,
+.add-job-form-container textarea:focus {
+  border-color: #0c4bbf;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(12, 75, 191, 0.15);
+}
+
+.add-job-form-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.add-job-form-container .btn-submit-lowongan {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: bold;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.add-job-form-container .btn-submit-lowongan:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+/* Penyesuaian untuk alert agar tidak terlalu lebar jika kolom kiri kosong */
+.job-listings-column .alert {
+  margin-bottom: 20px; /* Sesuaikan jika perlu */
 }

@@ -290,7 +290,7 @@ main {
 
 /* footer */
 footer {
-  background-color: #333; /* Warna latar belakang footer */
+  background: linear-gradient(to right, #1f1c2c, #928dab); /* Warna latar belakang footer */
   color: white; /* Warna teks default di footer */
   text-align: center;
   padding: 20px 15px; /* Padding atas/bawah dan kiri/kanan */

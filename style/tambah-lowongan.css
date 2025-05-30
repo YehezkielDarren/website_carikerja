@@ -1,18 +1,9 @@
-/* keyframes */
-@keyframes marquee {
-  from {
-    transform: translateX(100vw);
-  }
-  to {
-    transform: translateX(-100vw);
-  }
-}
-
 /* css tag */
 * {
   font-family: "IBM Plex Sans", sans-serif;
   margin: 0;
   padding: 0;
+  color: black;
 }
 body::-webkit-scrollbar {
   display: none;
@@ -150,6 +141,18 @@ nav a img:hover {
 .search-button:hover {
   background-color: #073a89;
 }
+.search-input.input-error {
+  border-color: red !important; /* Tambahkan !important jika perlu untuk override */
+}
+
+.search-error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+  /* display: none; akan diatur oleh JS */
+  text-align: left; /* Sesuaikan jika search-container tidak full width */
+  padding-left: 5px; /* Sedikit padding agar tidak terlalu mepet */
+}
 /* Container styling (optional for layout) */
 .filter-container {
   width: 100%;
@@ -194,15 +197,10 @@ nav a img:hover {
 }
 /* Bagian main */
 main {
-  background: linear-gradient(to right, #1f1c2c, #928dab);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Pastikan halaman minimal setinggi viewport */
-  padding-bottom: 100px; /* Tambahkan ruang agar footer tidak tertabrak */
+  min-height: 100vh;
+  width: 100%;
 }
-
 main #welcome {
-  background: linear-gradient(to right, #1f1c2c, #928dab);
   font-weight: bolder;
   padding-bottom: 10px;
 }
@@ -217,54 +215,25 @@ main #welcome {
 }
 /* breadcrumb */
 
-.breadcrumb-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 1.5rem;
-  background-color: #f3f2f1;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-}
-
-.breadcrumb-text p {
-  margin: 0;
+.breadcrumb {
+  top: 100px;
   font-size: 0.85rem;
   font-weight: bold;
+  padding: 0.25rem 0.5rem;
+  background-color: #f3f2f1;
+  border-radius: 5px;
+  max-width: fit-content;
+  margin: 1rem;
+}
+
+.breadcrumb p {
   color: #6a6a6a;
 }
 
-.breadcrumb-text a {
+.breadcrumb a {
   text-decoration: none;
   color: #0c4bbf;
-  margin-right: 5px;
 }
-
-.btn-back {
-  background-color: #0c4bbf;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.btn-back:hover {
-  background-color: #073a89;
-}
-@media (max-width: 600px) {
-  .breadcrumb-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .btn-back {
-    align-self: flex-end;
-  }
-}
-
 /* container pengumuman */
 .announcement-container {
   overflow: hidden;
@@ -312,105 +281,123 @@ main #welcome {
 /* Container */
 
 .job-container {
-  width: 90%;
-  max-width: 1000px;
+  width: 80%;
+  max-width: 1200px;
   margin: 20px auto;
-  padding: 0 1rem;
+  text-align: center;
   display: flex;
-  justify-content: center;
-}
-
-.job-box {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  gap: 2rem;
-  padding: 2rem;
-  width: 100%;
-}
-
-/* logo container tetap berukuran proporsional */
-.logo-container {
-  flex: 1 1 150px;
-  max-width: 200px;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  background: #f3f2f1;
-  padding: 20px;
+  gap: 20px;
+}
+
+/* Job Box */
+.job-box {
+  background: white;
   border-radius: 12px;
-}
-
-.logo-container img {
-  max-width: 100%;
-  max-height: 150px;
-  object-fit: contain;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-}
-
-.job-details {
-  flex: 2 1 500px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 350px; /* Setiap job box memiliki lebar maksimum */
+  transition: transform 0.3s ease;
 }
 
-.job-details h1 {
-  margin-top: 0;
-  font-size: 1.8rem;
+.job-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Job Image */
+.job-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Job Content */
+.job-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Company Logo */
+.company-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Job Title */
+.job-title {
+  font-size: 1.4em;
+  margin: 10px 0;
   color: #333;
 }
 
-.company-name,
-.location,
-.salary {
-  font-size: 1rem;
+/* Job Description */
+.job-desc {
+  font-size: 0.9em;
   color: #555;
-  margin: 0.5rem 0;
+  margin-bottom: 10px;
+  text-justify: inter-word;
 }
-
-.description,
-.requirements {
-  margin-top: 1.5rem;
+/* Job Location */
+.job-location {
+  font-size: 1.1em;
+  color: #6a6a6a;
+  margin-bottom: 10px;
 }
-
-.description p,
-.requirements li {
-  font-size: 0.95rem;
-  color: #444;
-  line-height: 1.5;
-}
-
-/* Tombol lamar */
-.btn-apply, .btn-alrapply {
-  margin-top: 2rem;
-  display: inline-block;
-  padding: 10px 20px;
+/* Job Salary */
+.job-salary {
+  font-size: 1.1em;
   font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: 0.3s;
+  color: #27ae60;
 }
 
-.btn-apply {
-  background-color: #0c4bbf;
+/* Job Status */
+.job-status {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-radius: 20px;
   color: white;
+  background-color: cadetblue;
+  margin-top: 10px;
 }
-
-.btn-apply:hover {
-  background-color: #073a89;
+.job-date {
+  font-size: 0.8em;
+  color: #999;
+  margin-top: 5px;
 }
-
-.btn-alrapply {
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
   background-color: #ccc;
-  color: #f3f3f3;
-  cursor: not-allowed;
+  color: #0c4bbf;
+  text-decoration: none;
+  margin: 10px 50px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  gap: 10px; /* Jarak antara ikon dan teks */
+  transition: 0.3s ease-in-out;
 }
 
+.btn-detail:hover {
+  color: #f3f2f1;
+  background-color: #27ae60;
+  font-weight: bold;
+}
+
+.btn-detail img {
+  width: 20px; /* Ukuran ikon lebih kecil */
+  height: auto;
+}
 
 /* Responsiveness */
 @media (min-width: 768px) {
@@ -459,13 +446,60 @@ footer .creators a:hover {
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
 
-.btn-back {
-  background-color: #0c4bbf;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
+.btn-action {
   text-decoration: none;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
   font-weight: bold;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  color: white;
+}
+
+.btn-action.lihat {
+  background-color: #3498db;
+}
+
+.btn-action.edit {
+  background-color: #f1c40f;
+  color: black;
+}
+
+.btn-action.hapus {
+  background-color: #e74c3c;
+}
+
+.btn-action:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* Tombol Tambah Pekerjaan Fixed */
+.btn-tambah-pekerjaan {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background-color: #28a745; /* Warna hijau, sesuaikan jika perlu */
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 50px; /* Membuatnya lebih bulat */
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Memastikan tombol di atas konten lain */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-tambah-pekerjaan:hover {
+  background-color: #218838; /* Warna hijau lebih gelap saat hover */
+  transform: translateY(-2px); /* Sedikit naik saat hover */
 }

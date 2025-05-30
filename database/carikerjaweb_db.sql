@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2025 at 07:13 AM
+-- Generation Time: May 30, 2025 at 04:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -28,14 +28,25 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `lamaran` (
-  `id` int(11) NOT NULL,
-  `pencari_kerja_id` int(11) DEFAULT NULL,
-  `lowongan_id` int(11) DEFAULT NULL,
-  `cv` varchar(255) DEFAULT NULL,
+  `id_lamaran` int(11) NOT NULL,
+  `lowongan_id` int(11) NOT NULL,
+  `pelamar_id` int(11) NOT NULL,
+  `nama_lengkap` varchar(100) NOT NULL,
+  `tanggal_lahir` date NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `no_hp` varchar(20) NOT NULL,
+  `cv` varchar(255) NOT NULL,
   `portofolio` varchar(255) DEFAULT NULL,
   `surat_lamaran` varchar(255) DEFAULT NULL,
-  `tanggal_lamaran` timestamp NOT NULL DEFAULT current_timestamp()
+  `tanggal_lamaran` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `lamaran`
+--
+
+INSERT INTO `lamaran` (`id_lamaran`, `lowongan_id`, `pelamar_id`, `nama_lengkap`, `tanggal_lahir`, `email`, `no_hp`, `cv`, `portofolio`, `surat_lamaran`, `tanggal_lamaran`) VALUES
+(1, 10, 1, ' Rina Andriani ', '1998-07-14', 'rina@mail.com', '081234567890', 'uploads/cv__Rina_Andriani_.pdf', 'uploads/portofolio__Rina_Andriani_.pdf', 'uploads/lamaran__Rina_Andriani_.pdf', '2025-05-25');
 
 -- --------------------------------------------------------
 
@@ -158,9 +169,9 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 -- Indexes for table `lamaran`
 --
 ALTER TABLE `lamaran`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `pencari_kerja_id` (`pencari_kerja_id`,`lowongan_id`),
-  ADD KEY `lowongan_id` (`lowongan_id`);
+  ADD PRIMARY KEY (`id_lamaran`),
+  ADD KEY `fk_lowongan` (`lowongan_id`),
+  ADD KEY `fk_pelamar_id` (`pelamar_id`);
 
 --
 -- Indexes for table `lowongan`
@@ -198,7 +209,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `lamaran`
 --
 ALTER TABLE `lamaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_lamaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `lowongan`
@@ -232,8 +243,8 @@ ALTER TABLE `users`
 -- Constraints for table `lamaran`
 --
 ALTER TABLE `lamaran`
-  ADD CONSTRAINT `lamaran_ibfk_1` FOREIGN KEY (`pencari_kerja_id`) REFERENCES `pencari_kerja` (`id`),
-  ADD CONSTRAINT `lamaran_ibfk_2` FOREIGN KEY (`lowongan_id`) REFERENCES `lowongan` (`id`);
+  ADD CONSTRAINT `fk_lowongan` FOREIGN KEY (`lowongan_id`) REFERENCES `lowongan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_pelamar_id` FOREIGN KEY (`pelamar_id`) REFERENCES `pencari_kerja` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `lowongan`

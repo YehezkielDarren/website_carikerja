@@ -93,7 +93,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style/dashboard-company.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
-    <link rel="stylesheet" href="style/footer.css" />
     <!-- <script src="script/search-filter.js" defer></script> Hapus defer jika ada masalah timing -->
     <title>Home - Cari Kerja.com</title>
   </head>
@@ -129,9 +128,6 @@
         </a>
       </nav>
     </header>
-    <section class="alert alert-danger" id="errorMsg" style="display: <?= empty($pesan_kosong) ? 'none' : 'block'; ?>;">
-        <p><?= htmlspecialchars($pesan_kosong); ?></p>
-      </section>
     <section class="search-filter">
       <div class="search-container">
         <form action="dashboard-company.php" method="get">
@@ -202,7 +198,7 @@
     <main>
       <section id="welcome">
         <div class="breadcrumb">
-          <p><a href="index.html">Home</a></p>
+          <p><a href="index.php">Home</a></p>
         </div>
         <?php
           if (isset($_SESSION['username'])) {
@@ -210,44 +206,105 @@
           }
         ?>
       </section>
-      <?php if(mysqli_num_rows($result)>0) : ?>
-      <section class="job-container">
-      <?php 
-            foreach ($jobListFilter as $job): ?>
-          <div class="job-box">
-            <img
-              src="<?= htmlspecialchars($job['logo']) ?>"
-              class="job-image"
-              alt="<?= htmlspecialchars($job['nama_perusahaan']) ?>"
-            />
-            <div class="job-content">
-              <h2 class="job-title"><?= htmlspecialchars($job['nama_pekerjaan']) ?></h2>
-              <h2 class="job-company"><?= htmlspecialchars($job['nama_perusahaan']) ?></h2>
-              <p class="job-location">📍 <?= htmlspecialchars($job['lokasi']) ?></p>
-              <p class="job-desc"><?= htmlspecialchars(potongDeskripsi($job['deskripsi'],20)) ?></p>
-              <p class="job-salary">💰 <?= htmlspecialchars($job['gaji']) ?></p>
-              <p class="job-date">
-                <span class="tanggal">Tanggal Batas: <?= htmlspecialchars(formatTanggal($job['tanggal_batas'])) ?></span>
-              </p>
-              <div class="status">
-                <p class="job-status <?= strtolower($job['jenis_pekerjaan']) ?>"><?= $job['jenis_pekerjaan'] ?></p>
-                <p class="job-status <?= strtolower($job['kategori']) ?>"><?= $job['kategori'] ?></p>
+      <div class="dashboard-layout">
+        <div class="job-listings-column">
+          <?php if (!empty($pesan_kosong) && !(isset($_GET['submit_judul']) || isset($_GET['submit_filter']))): ?>
+              <section class="alert alert-info">
+                  <p><?= htmlspecialchars($pesan_kosong); ?></p>
+              </section>
+          <?php elseif (!empty($pesan) && (isset($_GET['submit_judul']) || isset($_GET['submit_filter']))): ?>
+              <section class="alert alert-warning">
+                  <p><?= htmlspecialchars($pesan); ?></p>
+              </section>
+          <?php elseif (!empty($jobListFilter)): ?>
+              <section class="job-container">
+              <?php foreach ($jobListFilter as $job): ?>
+                  <div class="job-box">
+                    <img
+                      src="<?= htmlspecialchars($job['logo']) ?>"
+                      class="job-image"
+                      alt="<?= htmlspecialchars($job['nama_perusahaan']) ?>"
+                    />
+                    <div class="job-content">
+                      <h2 class="job-title"><?= htmlspecialchars($job['nama_pekerjaan']) ?></h2>
+                      <h2 class="job-company"><?= htmlspecialchars($job['nama_perusahaan']) ?></h2>
+                      <p class="job-location">📍 <?= htmlspecialchars($job['lokasi']) ?></p>
+                      <p class="job-desc"><?= htmlspecialchars(potongDeskripsi($job['deskripsi'],20)) ?></p>
+                      <p class="job-salary">💰 <?= htmlspecialchars($job['gaji']) ?></p>
+                      <p class="job-date">
+                        <span class="tanggal">Tanggal Batas: <?= htmlspecialchars(formatTanggal($job['tanggal_batas'])) ?></span>
+                      </p>
+                      <div class="status">
+                        <p class="job-status <?= strtolower($job['jenis_pekerjaan']) ?>"><?= $job['jenis_pekerjaan'] ?></p>
+                        <p class="job-status <?= strtolower($job['kategori']) ?>"><?= $job['kategori'] ?></p>
+                      </div>
+                    </div>
+                    <div class="action-buttons">
+                      <a href="cek-pelamar.php?id=<?= $job['lowongan_id'] ?>" class="btn-action lihat">👀 Pelamar</a>
+                      <a href="edit-lowongan.php?id=<?= $job['lowongan_id'] ?>" class="btn-action edit">✏️ Edit</a>
+                      <a href="hapus-lowongan.php?id=<?= $job['lowongan_id'] ?>" class="btn-action hapus" onclick="return confirm('Yakin ingin menghapus lowongan ini?')">🗑️ Hapus</a>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </section>
+          <?php endif; ?>
+        </div>
+
+        <div class="add-job-column">
+          <section class="add-job-form-container">
+            <h2>Tambah Lowongan Pekerjaan Baru</h2>
+            <form action="tambah-lowongan.php" method="POST">
+              <div class="form-group">
+                <label for="nama_pekerjaan_form">Nama Pekerjaan:</label>
+                <input type="text" id="nama_pekerjaan_form" name="nama_pekerjaan" required>
               </div>
-            </div>
-            <div class="action-buttons">
-              <a href="pelamar.php?id=<?= $job['lowongan_id'] ?>" class="btn-action lihat">👀 Pelamar</a>
-              <a href="edit-lowongan.php?id=<?= $job['lowongan_id'] ?>" class="btn-action edit">✏️ Edit</a>
-              <a href="hapus-lowongan.php?id=<?= $job['lowongan_id'] ?>" class="btn-action hapus" onclick="return confirm('Yakin ingin menghapus lowongan ini?')">🗑️ Hapus</a>
-            </div>
-          </div>
-        <?php endforeach; ?>
-      </section>
-      <?php endif;?>
-      <div id="tampilPelamar" class="custom-alert">
-        <h2>List Pelamar</h2>
-        <div id="alertMessage"></div>
-      <button onclick="closeAlert()">OK</button>
-    </div>
+              <div class="form-group">
+                <label for="jenis_pekerjaan_form">Jenis Pekerjaan:</label>
+                <select id="jenis_pekerjaan_form" name="jenis_pekerjaan" required>
+                  <option value="">Pilih Jenis Pekerjaan</option>
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Freelance">Freelance</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="kategori_form">Kategori Pekerjaan:</label>
+                <input type="text" id="kategori_form" name="kategori" required placeholder="Contoh: IT, Marketing, Desain">
+              </div>
+              <div class="form-group">
+                <label for="lokasi_form">Lokasi:</label>
+                <input type="text" id="lokasi_form" name="lokasi" required>
+              </div>
+              <div class="form-group">
+                <label for="gaji_form">Gaji:</label>
+                <input type="text" id="gaji_form" name="gaji" placeholder="Contoh: Rp 5.000.000 atau Kompetitif" required>
+              </div>
+              <div class="form-group">
+                <label for="deskripsi_form">Deskripsi Pekerjaan:</label>
+                <textarea id="deskripsi_form" name="deskripsi" rows="4" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="syarat_form">Syarat Pekerjaan:</label>
+                <textarea id="syarat_form" name="syarat" rows="4" required placeholder="Pisahkan setiap syarat dengan titik koma (;)"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="tanggal_batas_form">Tanggal Batas Lamaran:</label>
+                <input type="date" id="tanggal_batas_form" name="tanggal_batas" required>
+              </div>
+              <div class="form-group">
+                <label for="isPorto_form">Perlu Portofolio?</label>
+                <select id="isPorto_form" name="isPorto" required>
+                  <option value="0">Tidak</option>
+                  <option value="1">Ya</option>
+                </select>
+              </div>
+              <button type="submit" name="submit_tambah_lowongan" class="btn-submit-lowongan">Tambah Lowongan</button>
+            </form>
+          </section>
+        </div>
+      </div>            
     </main>
     <footer>
       <p>&copy; 2025 Cari Kerja.com</p>
