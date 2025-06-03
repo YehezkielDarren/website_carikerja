@@ -6,8 +6,120 @@
     exit();
   }
   $user_id = $_SESSION['id'];
-  $pesan = "";
-  $pesan_kosong = "";
+  $pesan = ""; 
+  $pesan_kosong = ""; 
+  $pesan_operasi = "";
+  $pesan_hapus=""; 
+  $job_to_edit = null;
+  $is_editing = false;
+
+  // --- Handle Edit Request (GET) ---
+  if (isset($_GET['edit_id']) && is_numeric($_GET['edit_id'])) {
+    $edit_id = mysqli_real_escape_string($conn, $_GET['edit_id']);
+    $sql_edit = "SELECT * FROM lowongan WHERE id = '$edit_id' AND perusahaan_id = '$user_id'";
+    $result_edit = mysqli_query($conn, $sql_edit);
+    if ($result_edit && mysqli_num_rows($result_edit) > 0) {
+      $job_to_edit = mysqli_fetch_assoc($result_edit);
+      $is_editing = true;
+    } else {
+      $pesan_operasi = "Lowongan untuk diedit tidak ditemukan atau Anda tidak berhak mengeditnya.";
+    }
+  }
+
+  // --- Handle Update Lowongan (POST) ---
+  if (isset($_POST['submit_update_lowongan'])) {
+    $lowongan_id_update = mysqli_real_escape_string($conn, $_POST['lowongan_id_update']);
+    $nama_pekerjaan = mysqli_real_escape_string($conn, $_POST['nama_pekerjaan']);
+    $jenis_pekerjaan = mysqli_real_escape_string($conn, $_POST['jenis_pekerjaan']);
+    $kategori = mysqli_real_escape_string($conn, $_POST['kategori']);
+    $lokasi = mysqli_real_escape_string($conn, $_POST['lokasi']);
+    $gaji = mysqli_real_escape_string($conn, $_POST['gaji']);
+    $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
+    $syarat = mysqli_real_escape_string($conn, $_POST['syarat']);
+    $tanggal_batas = mysqli_real_escape_string($conn, $_POST['tanggal_batas']);
+    $isPorto = mysqli_real_escape_string($conn, $_POST['isPorto']);
+
+    // Basic validation can be more thorough
+    if (!empty($nama_pekerjaan) && !empty($jenis_pekerjaan) && !empty($kategori) && !empty($lokasi) && !empty($gaji) && !empty($deskripsi) && !empty($syarat) && !empty($tanggal_batas)) {
+        $sql_update_query = "UPDATE lowongan SET nama_pekerjaan = '$nama_pekerjaan', jenis_pekerjaan = '$jenis_pekerjaan', kategori = '$kategori', lokasi = '$lokasi', gaji = '$gaji', deskripsi = '$deskripsi', syarat = '$syarat', tanggal_batas = '$tanggal_batas', isPorto = '$isPorto' WHERE id = '$lowongan_id_update' AND perusahaan_id = '$user_id'";
+        if (mysqli_query($conn, $sql_update_query)) {
+            header("Location: dashboard-company.php?update_status=success");
+            exit();
+        } else {
+            $pesan_operasi = "Gagal mengupdate lowongan: " . mysqli_error($conn);
+        }
+    } else {
+        $pesan_operasi = "Semua field wajib diisi untuk update.";
+        // To retain form values on error, repopulate $job_to_edit with $_POST data if needed
+        // For now, if edit_id is still in URL, form will show original edit data.
+        // If not, it will be an empty "add" form.
+    }
+  }
+
+  // --- Handle Tambah Lowongan (POST) ---
+  if (isset($_POST['submit_tambah_lowongan'])) {
+    // Ensure this is not an update submission by checking if lowongan_id_update is NOT set
+    if (!isset($_POST['lowongan_id_update'])) {
+        $nama_pekerjaan_tambah = mysqli_real_escape_string($conn, $_POST['nama_pekerjaan']);
+        $jenis_pekerjaan_tambah = mysqli_real_escape_string($conn, $_POST['jenis_pekerjaan']);
+        $kategori_tambah = mysqli_real_escape_string($conn, $_POST['kategori']);
+        $lokasi_tambah = mysqli_real_escape_string($conn, $_POST['lokasi']);
+        $gaji_tambah = mysqli_real_escape_string($conn, $_POST['gaji']);
+        $deskripsi_tambah = mysqli_real_escape_string($conn, $_POST['deskripsi']);
+        $syarat_tambah = mysqli_real_escape_string($conn, $_POST['syarat']);
+        $tanggal_batas_tambah = mysqli_real_escape_string($conn, $_POST['tanggal_batas']);
+        $isPorto_tambah = mysqli_real_escape_string($conn, $_POST['isPorto']);
+        // $user_id is already defined as $_SESSION['id']
+
+        if (!empty($nama_pekerjaan_tambah) && !empty($jenis_pekerjaan_tambah) && !empty($kategori_tambah) && !empty($lokasi_tambah) && !empty($gaji_tambah) && !empty($deskripsi_tambah) && !empty($syarat_tambah) && !empty($tanggal_batas_tambah)) {
+            $sql_cek_nama = "SELECT id FROM lowongan WHERE nama_pekerjaan = '$nama_pekerjaan_tambah' AND perusahaan_id = '$user_id'";
+            $res_cek_nama = mysqli_query($conn, $sql_cek_nama);
+            if (mysqli_num_rows($res_cek_nama) > 0) {
+                $pesan_operasi = "Lowongan dengan nama pekerjaan tersebut sudah ada untuk perusahaan Anda.";
+            } else {
+                $sql_insert = "INSERT INTO lowongan (perusahaan_id, nama_pekerjaan, jenis_pekerjaan, kategori, lokasi, gaji, deskripsi, syarat, tanggal_batas, isPorto, tanggal_dibuat) 
+                               VALUES ('$user_id', '$nama_pekerjaan_tambah', '$jenis_pekerjaan_tambah', '$kategori_tambah', '$lokasi_tambah', '$gaji_tambah', '$deskripsi_tambah', '$syarat_tambah', '$tanggal_batas_tambah', '$isPorto_tambah', NOW())";
+                if (mysqli_query($conn, $sql_insert)) {
+                    header("Location: dashboard-company.php?tambah_status=success");
+                    exit();
+                } else {
+                    $pesan_operasi = "Gagal menambah lowongan: " . mysqli_error($conn);
+                }
+            }
+        } else {
+            $pesan_operasi = "Semua field wajib diisi untuk menambah lowongan.";
+        }
+    }
+  }
+
+  // --- Handle status messages from redirects ---
+  if (isset($_GET['update_status']) && $_GET['update_status'] === 'success') {
+    $pesan_operasi = "Lowongan berhasil diupdate!";
+  }
+  if (isset($_GET['tambah_status']) && $_GET['tambah_status'] === 'success') {
+    $pesan_operasi = "Lowongan berhasil ditambahkan!";
+  }
+  // Example for gagal, if you pass error messages via session or query param
+  // if (isset($_GET['tambah_status']) && $_GET['tambah_status'] === 'gagal') {
+  //   $pesan_operasi = "Gagal menambahkan lowongan. " . ($_GET['error_msg'] ?? '');
+  // }
+  if (isset($_GET['hapus_status'])) {
+    switch ($_GET['hapus_status']) {
+        case 'success':
+            $pesan_hapus = "Lowongan berhasil dihapus!";
+            break;
+        case 'gagal_ada_pelamar':
+            $pesan_hapus = "Gagal menghapus: Masih ada pelamar yang terdaftar pada lowongan ini.";
+            break;
+        case 'gagal_auth':
+        case 'gagal_invalid_id':
+        case 'gagal_query':
+            $pesan_hapus = "Gagal menghapus lowongan. Silakan coba lagi atau hubungi administrator.";
+            break;
+    }
+  }
+
+
   $sql = "SELECT 
           lowongan.id AS lowongan_id,
           lowongan.nama_pekerjaan,
@@ -21,19 +133,22 @@
           perusahaan.logo
       FROM lowongan
       JOIN perusahaan ON lowongan.perusahaan_id = perusahaan.id
-      where (tanggal_batas > now() and lowongan.perusahaan_id = '$user_id')
-      ORder by tanggal_batas DESC";
+      WHERE (lowongan.tanggal_batas > NOW() AND lowongan.perusahaan_id = '$user_id')
+      ORDER BY lowongan.tanggal_batas DESC";
 
   $result = mysqli_query($conn, $sql);
 
   $jobList = [];
 
-  if (mysqli_num_rows($result) > 0) {
+  if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
       $jobList[] = $row;
     }
   } else {
-    $pesan_kosong = "Anda belum membuat lowongan kerja.";
+    // Only set $pesan_kosong if no filters are active and no operations just happened that might clear the list temporarily
+    if (!isset($_GET['submit_judul']) && !isset($_GET['submit_filter']) && empty($pesan_operasi)) {
+        $pesan_kosong = "Anda belum membuat lowongan kerja.";
+    }
   }
   $jobListFilter = [];
   if (isset($_GET['submit_judul']) || isset($_GET['submit_filter'])) {
@@ -81,10 +196,11 @@
         // Jika tidak ada hasil, tampilkan pesan
         $pesan = "Tidak ada lowongan yang sesuai dengan kriteria pencarian.";
     }
-  }else {
+  } else {
     $jobListFilter = $jobList;
   }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,7 +220,7 @@
       </div>
       <nav>
         <ul type="none">
-          <li><a href="index.html">Home</a></li>
+          <li><a href="index.php">Home</a></li>
           <span class="separator"></span>
           <li>
             <?php
@@ -206,6 +322,11 @@
           }
         ?>
       </section>
+      <?php if (!empty($pesan_hapus)): ?>
+              <div class="alert <?= (strpos(strtolower($pesan_hapus), 'berhasil') !== false || strpos(strtolower($pesan_operasi), 'success') !== false) ? 'alert-success' : 'alert-danger' ?>" style="margin-bottom: 15px; padding: 10px; border-radius: 4px; border: 1px solid transparent;">
+                  <?= htmlspecialchars($pesan_hapus); ?>
+              </div>
+            <?php endif; ?>
       <div class="dashboard-layout">
         <div class="job-listings-column">
           <?php if (!empty($pesan_kosong) && !(isset($_GET['submit_judul']) || isset($_GET['submit_filter']))): ?>
@@ -240,8 +361,8 @@
                       </div>
                     </div>
                     <div class="action-buttons">
-                      <a href="cek-pelamar.php?id=<?= $job['lowongan_id'] ?>" class="btn-action lihat">👀 Pelamar</a>
-                      <a href="edit-lowongan.php?id=<?= $job['lowongan_id'] ?>" class="btn-action edit">✏️ Edit</a>
+                      <a href="cek-pelamar.php?id=<?= $job['lowongan_id'] ?>" class="btn-action lihat">👀 Cek Pelamar</a>
+                      <a href="dashboard-company.php?edit_id=<?= $job['lowongan_id'] ?>" class="btn-action edit">✏️ Edit</a>
                       <a href="hapus-lowongan.php?id=<?= $job['lowongan_id'] ?>" class="btn-action hapus" onclick="return confirm('Yakin ingin menghapus lowongan ini?')">🗑️ Hapus</a>
                     </div>
                   </div>
@@ -252,55 +373,75 @@
 
         <div class="add-job-column">
           <section class="add-job-form-container">
-            <h2>Tambah Lowongan Pekerjaan Baru</h2>
-            <form action="tambah-lowongan.php" method="POST">
+            <h2><?= $is_editing ? 'Edit Lowongan Pekerjaan' : 'Tambah Lowongan Pekerjaan Baru' ?></h2>
+            <?php if (!empty($pesan_operasi)): ?>
+              <div class="alert <?= (strpos(strtolower($pesan_operasi), 'berhasil') !== false || strpos(strtolower($pesan_operasi), 'success') !== false) ? 'alert-success' : 'alert-danger' ?>" style="margin-bottom: 15px; padding: 10px; border-radius: 4px; border: 1px solid transparent;">
+                  <?= htmlspecialchars($pesan_operasi); ?>
+              </div>
+            <?php endif; ?>
+
+            <form action="dashboard-company.php" method="POST">
+              <?php if ($is_editing && $job_to_edit): ?>
+                <input type="hidden" name="lowongan_id_update" value="<?= htmlspecialchars($job_to_edit['id']) ?>">
+              <?php endif; ?>
+
               <div class="form-group">
                 <label for="nama_pekerjaan_form">Nama Pekerjaan:</label>
-                <input type="text" id="nama_pekerjaan_form" name="nama_pekerjaan" required>
+                <input type="text" id="nama_pekerjaan_form" name="nama_pekerjaan" required value="<?= htmlspecialchars($job_to_edit['nama_pekerjaan'] ?? '') ?>">
               </div>
               <div class="form-group">
                 <label for="jenis_pekerjaan_form">Jenis Pekerjaan:</label>
                 <select id="jenis_pekerjaan_form" name="jenis_pekerjaan" required>
                   <option value="">Pilih Jenis Pekerjaan</option>
-                  <option value="Full-time">Full-time</option>
-                  <option value="Part-time">Part-time</option>
-                  <option value="Internship">Internship</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Freelance">Freelance</option>
+                  <?php
+                    $jenis_opsi = ["Full-time", "Part-time", "Internship", "Contract", "Freelance"];
+                    $selected_jenis = $job_to_edit['jenis_pekerjaan'] ?? '';
+                    foreach ($jenis_opsi as $opsi) {
+                        echo '<option value="' . htmlspecialchars($opsi) . '"' . ($selected_jenis === $opsi ? ' selected' : '') . '>' . htmlspecialchars($opsi) . '</option>';
+                    }
+                  ?>
                 </select>
               </div>
               <div class="form-group">
                 <label for="kategori_form">Kategori Pekerjaan:</label>
-                <input type="text" id="kategori_form" name="kategori" required placeholder="Contoh: IT, Marketing, Desain">
+                <input type="text" id="kategori_form" name="kategori" required placeholder="Contoh: IT, Marketing, Desain" value="<?= htmlspecialchars($job_to_edit['kategori'] ?? '') ?>">
               </div>
               <div class="form-group">
                 <label for="lokasi_form">Lokasi:</label>
-                <input type="text" id="lokasi_form" name="lokasi" required>
+                <input type="text" id="lokasi_form" name="lokasi" required value="<?= htmlspecialchars($job_to_edit['lokasi'] ?? '') ?>">
               </div>
               <div class="form-group">
                 <label for="gaji_form">Gaji:</label>
-                <input type="text" id="gaji_form" name="gaji" placeholder="Contoh: Rp 5.000.000 atau Kompetitif" required>
+                <input type="text" id="gaji_form" name="gaji" placeholder="Contoh: Rp 5.000.000 atau Kompetitif" required value="<?= htmlspecialchars($job_to_edit['gaji'] ?? '') ?>">
               </div>
               <div class="form-group">
                 <label for="deskripsi_form">Deskripsi Pekerjaan:</label>
-                <textarea id="deskripsi_form" name="deskripsi" rows="4" required></textarea>
+                <textarea id="deskripsi_form" name="deskripsi" rows="4" required><?= htmlspecialchars($job_to_edit['deskripsi'] ?? '') ?></textarea>
               </div>
               <div class="form-group">
                 <label for="syarat_form">Syarat Pekerjaan:</label>
-                <textarea id="syarat_form" name="syarat" rows="4" required placeholder="Pisahkan setiap syarat dengan titik koma (;)"></textarea>
+                <textarea id="syarat_form" name="syarat" rows="4" required placeholder="Pisahkan setiap syarat dengan titik koma (;)"><?= htmlspecialchars($job_to_edit['syarat'] ?? '') ?></textarea>
               </div>
               <div class="form-group">
                 <label for="tanggal_batas_form">Tanggal Batas Lamaran:</label>
-                <input type="date" id="tanggal_batas_form" name="tanggal_batas" required>
+                <input type="date" id="tanggal_batas_form" name="tanggal_batas" required value="<?= htmlspecialchars($job_to_edit['tanggal_batas'] ?? '') ?>" min="<?= date('Y-m-d') ?>">
               </div>
               <div class="form-group">
                 <label for="isPorto_form">Perlu Portofolio?</label>
                 <select id="isPorto_form" name="isPorto" required>
-                  <option value="0">Tidak</option>
-                  <option value="1">Ya</option>
+                  <?php
+                    $isPorto_selected = $job_to_edit['isPorto'] ?? '0'; // Default to '0' (Tidak) for new entries
+                  ?>
+                  <option value="0" <?= ($isPorto_selected == '0' ? 'selected' : '') ?>>Tidak</option>
+                  <option value="1" <?= ($isPorto_selected == '1' ? 'selected' : '') ?>>Ya</option>
                 </select>
               </div>
-              <button type="submit" name="submit_tambah_lowongan" class="btn-submit-lowongan">Tambah Lowongan</button>
+              <?php if ($is_editing): ?>
+                <button type="submit" name="submit_update_lowongan" class="btn-submit-lowongan">Update Lowongan</button>
+                <a href="dashboard-company.php" class="btn-cancel-edit" style="display: inline-block; margin-top: 10px; padding: 10px 15px; background-color: #aaa; color: white; text-decoration: none; border-radius: 4px; text-align:center;">Batal Edit</a>
+              <?php else: ?>
+                <button type="submit" name="submit_tambah_lowongan" class="btn-submit-lowongan">Tambah Lowongan</button>
+              <?php endif; ?>
             </form>
           </section>
         </div>
