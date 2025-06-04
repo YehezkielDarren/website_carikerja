@@ -1,5 +1,6 @@
 <?php
-    require 'connection.php';
+    require '../src/includes/connection.php';
+    require_once '../src/includes/helpers.php';
     session_start();
     // validasi login
     if (!isset($_SESSION['username']) || !isset($_SESSION['role'])){
@@ -72,9 +73,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style/cek-pelamar.css">
+    <link rel="stylesheet" href="assets/css/cek-pelamar.css">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png">
-    <script src="script/detial-pelamar.js"></script>
+    <script src="assets/js/detial-pelamar.js"></script>
     <title>List Pelamar</title>
 </head>
 <body>

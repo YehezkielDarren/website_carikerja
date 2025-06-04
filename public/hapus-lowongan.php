@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'connection.php';
+require_once '../src/includes/connection.php';
 
 // 1. Autentikasi dan Autorisasi Pengguna
 if (!isset($_SESSION['username']) || $_SESSION['role'] != 'perusahaan') {

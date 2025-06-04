@@ -1,6 +1,7 @@
 <?php
     session_start();
-    require_once 'connection.php';
+    require_once '../src/includes/connection.php';
+    require_once '../src/includes/helpers.php';
     $pesan = "";
     $id = $_GET['id'] ?? ""; // id lowongan pekerjaan
     $nama = $_SESSION['username'] ?? "";
@@ -40,11 +41,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/detail.css" />
-    <link rel="stylesheet" href="style/time.css" />
+    <link rel="stylesheet" href="assets/css/detail.css" />
+    <link rel="stylesheet" href="assets/css/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
-    <link rel="stylesheet" href="style/footer.css" />
-    <script src="script/time.js"></script>
+    <link rel="stylesheet" href="assets/css/footer.css" />
+    <script src="assets/js/time.js"></script>
     <title>Detail - Cari Kerja.com</title>
   </head>
   <body>
@@ -139,42 +140,3 @@
     </footer>
   </body>
 </html>
-<?php
-  function formatTanggal($tanggal) {
-    $date = DateTime::createFromFormat('Y-m-d', $tanggal);
-    if ($date === false) {
-        return $tanggal;
-    }
-    $date->setTimezone(new DateTimeZone('Asia/Jakarta'));
-    return strftime('%d %B %Y', $date->getTimestamp());
-  }
-  
-  function potongDeskripsi($teks, $jumlahKata = 20) {
-    $kata = explode(" ", strip_tags($teks));
-    if (count($kata) > $jumlahKata) {
-        $kata = array_slice($kata, 0, $jumlahKata);
-        return implode(" ", $kata) . "...";
-    } else {
-        return $teks;
-    }
-  }
-  function generateBreadcrumb() {
-      $path = $_SERVER['PHP_SELF']; // contoh: /project/detail.php
-      $pathParts = explode('/', trim($path, '/')); // hapus slash & pecah
-      $breadcrumb = '<div class="breadcrumb"><p>';
-
-      $link = '';
-      foreach ($pathParts as $index => $part) {
-          $link .= '/' . $part;
-          $name = ($part === 'index.php') ? 'Home' : ucfirst(str_replace(['.php', '-', '_'], ['',' ', ' '], $part));
-          // Jadikan hanya bagian terakhir sebagai teks tanpa link
-          if ($index < count($pathParts) - 1) {
-              $breadcrumb .= '<a href="' . $link . '">' . $name . '</a> / ';
-          } else {
-              $breadcrumb .= $name;
-          }
-      }
-      $breadcrumb .= '</p></div>';
-      return $breadcrumb;
-  }
-?>

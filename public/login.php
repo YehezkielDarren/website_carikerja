@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'connection.php';
+require_once '../src/includes/connection.php';
 
 $pesan = "";
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['logo'] = $row2['foto'];
                 $_SESSION['id'] = $row2['id'];
             }
-            header("Location: index.php");
+            header("Location: dashboard-worker.php");
             exit();
         }
     } else {
@@ -63,13 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style/login.css">
-    <link rel="stylesheet" href="style/time.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="assets/css/time.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
-    <link rel="stylesheet" href="style/footer.css" />
-    <script src="script/script.js"></script>
-    <script src="script/time.js"></script>
+    <link rel="stylesheet" href="assets/css/footer.css" />
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/time.js"></script>
 </head>
 <body>
     <header>

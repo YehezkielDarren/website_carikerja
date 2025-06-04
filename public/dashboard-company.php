@@ -1,6 +1,8 @@
 <?php
   session_start();
-  require_once 'connection.php';
+  require_once '../src/includes/connection.php';
+  require_once '../src/includes/helpers.php';
+
   if (!isset($_SESSION['username']) || $_SESSION['role'] != 'perusahaan') {
     header("Location: index.php");
     exit();
@@ -50,9 +52,6 @@
         }
     } else {
         $pesan_operasi = "Semua field wajib diisi untuk update.";
-        // To retain form values on error, repopulate $job_to_edit with $_POST data if needed
-        // For now, if edit_id is still in URL, form will show original edit data.
-        // If not, it will be an empty "add" form.
     }
   }
 
@@ -207,9 +206,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style/dashboard-company.css" />
+    <link rel="stylesheet" href="assets/css/dashboard-company.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
-    <!-- <script src="script/search-filter.js" defer></script> Hapus defer jika ada masalah timing -->
+    <script src="assets/js/search-filter.js"></script>
     <title>Home - Cari Kerja.com</title>
   </head>
   <body>
@@ -459,23 +458,3 @@
     <script src="script/search-filter.js"></script>
   </body>
 </html>
-<?php
-  function formatTanggal($tanggal) {
-    $date = DateTime::createFromFormat('Y-m-d', $tanggal);
-    if ($date === false) {
-        return $tanggal;
-    }
-    $date->setTimezone(new DateTimeZone('Asia/Jakarta'));
-    return strftime('%d %B %Y', $date->getTimestamp());
-  }
-  
-  function potongDeskripsi($teks, $jumlahKata = 20) {
-    $kata = explode(" ", strip_tags($teks));
-    if (count($kata) > $jumlahKata) {
-        $kata = array_slice($kata, 0, $jumlahKata);
-        return implode(" ", $kata) . "...";
-    } else {
-        return $teks;
-    }
-  }
-?>
