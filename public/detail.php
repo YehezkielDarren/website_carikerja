@@ -26,9 +26,9 @@
     $syarat = explode("; ", $data['syarat']);
     // cek apakah user sudah pernah melamar
     $lamar = false;
-    $query = "SELECT * FROM lamaran WHERE pelamar_id= ?";
+    $query = "SELECT * FROM lamaran WHERE lowongan_id = ? AND pelamar_id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $_SESSION['id']);
+    mysqli_stmt_bind_param($stmt, "ii",$_GET['id'], $_SESSION['id']);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if ($result && mysqli_num_rows($result) > 0) {
@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="assets/css/detail.css" />
     <link rel="stylesheet" href="assets/css/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
-    <link rel="stylesheet" href="assets/css/footer.css" />
+    <link rel="stylesheet" href="assets/css/global-styles.css" />
     <script src="assets/js/time.js"></script>
     <title>Detail - Cari Kerja.com</title>
   </head>
@@ -69,7 +69,7 @@
             ?>
           </li>
         </ul>
-        <a href="login.php">
+        <a href="dashboard-worker.php">
           <?php
               if(isset($_SESSION['logo'])) {
                 echo '<img src="' . htmlspecialchars($_SESSION['logo']) . '" alt="profilepict" class="profilepicture" />';
@@ -87,8 +87,18 @@
       </div>
       <section id="welcome">
         <div class="breadcrumb-bar">
-          <div class="breadcrumb-text">
-            <?= generateBreadcrumb(); ?>
+          <div class="breadcrumb-box">
+            <div class="breadcrumb-text-inactive">
+              <a href="dashboard-worker.php">Dashboard</a>
+            </div>  
+            <span class="separator-breadcrumb">></span>
+            <div class="breadcrumb-text-inactive">
+              <a href="index.php">Home</a>
+            </div>  
+            <span class="separator-breadcrumb">></span>
+            <div class="breadcrumb-text">
+              <a href="#">Detail</a>
+            </div>
           </div>
           <a href="index.php" class="btn-back">Kembali</a>
         </div>
@@ -138,5 +148,12 @@
         <a href="#" target="_blank">Syendhi Reswara/71231061</a>
       </p>
     </footer>
+    <script>
+      btnAlrApply= document.querySelector('.btn-alrapply');
+      btnAlrApply.addEventListener('click', function(event) {
+        event.preventDefault(); // Mencegah aksi default link
+        alert('Anda sudah melamar pekerjaan ini.');
+      });
+    </script>
   </body>
 </html>

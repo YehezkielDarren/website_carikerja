@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="assets/css/time.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
-    <link rel="stylesheet" href="assets/css/footer.css" />
+    <link rel="stylesheet" href="assets/css/global-styles.css" />
     <script src="assets/js/script.js"></script>
     <script src="assets/js/time.js"></script>
 </head>

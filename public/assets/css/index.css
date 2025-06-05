@@ -7,98 +7,6 @@
     transform: translateX(-100vw);
   }
 }
-
-/* css tag */
-* {
-  font-family: "IBM Plex Sans", sans-serif;
-  margin: 0;
-  padding: 0;
-}
-body::-webkit-scrollbar {
-  display: none;
-}
-/* bagian header -> meliputi home, login, dan logo website*/
-header {
-  background: linear-gradient(to right, #1f1c2c, #928dab);
-  position: sticky;
-  top: 0;
-  width: 100%;
-  padding: px 20px;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid grey;
-  z-index: 100;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-.logo img {
-  width: 80px;
-  height: auto;
-}
-.logo a {
-  color: antiquewhite;
-  font-weight: bold;
-  font-size: 24px;
-  margin: 0;
-  display: flex;
-}
-.logo .small {
-  color: antiquewhite;
-  font-size: small;
-  align-self: flex-end;
-}
-
-nav {
-  flex-grow: 1;
-  display: flex;
-  justify-content: end;
-  gap: 20px;
-  align-items: center;
-}
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-nav ul li {
-  display: inline;
-}
-nav ul li a {
-  color: antiquewhite;
-  font-weight: bolder;
-  text-decoration: none;
-  transition: 0.1s ease-in-out;
-  padding: 5px;
-}
-nav ul li a:hover {
-  border-radius: 5px;
-  font-weight: bold;
-
-  text-underline-offset: 5px;
-  color: #0c4bbf;
-}
-.separator {
-  width: 1px;
-  background-color: #ccc;
-  height: 20px;
-}
-.profilepicture {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 3px solid #ccc;
-  object-fit: cover;
-  margin-right: 10px;
-}
-nav a img:hover {
-  border: 3px solid #0c4bbf;
-  border-radius: 50%;
-}
 /* Search-filter */
 .search-filter {
   display: flex;
@@ -224,57 +132,6 @@ main #welcome {
   text-transform: uppercase;
   color: #0c4bbf;
 }
-/* breadcrumb */
-
-.breadcrumb-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 1.5rem;
-  background-color: #f3f2f1;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-}
-
-.breadcrumb-text p {
-  margin: 0;
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #6a6a6a;
-}
-
-.breadcrumb-text a {
-  text-decoration: none;
-  color: #0c4bbf;
-  margin-right: 5px;
-}
-
-.btn-back {
-  background-color: #0c4bbf;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.btn-back:hover {
-  background-color: #073a89;
-}
-@media (max-width: 600px) {
-  .breadcrumb-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .btn-back {
-    align-self: flex-end;
-  }
-}
-
 /* container pengumuman */
 .announcement-container {
   overflow: hidden;
@@ -449,7 +306,11 @@ main #welcome {
 
 /* bagian footer */
 footer {
-  background: linear-gradient(to right, #1f1c2c, #928dab); /* Warna latar belakang footer */
+  background: linear-gradient(
+    to right,
+    #1f1c2c,
+    #928dab
+  ); /* Warna latar belakang footer */
   color: white; /* Warna teks default di footer */
   text-align: center;
   padding: 20px 15px; /* Padding atas/bawah dan kiri/kanan */

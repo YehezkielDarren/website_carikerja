@@ -113,9 +113,10 @@ if (empty($applied_jobs) && $jumlah_lamaran_user == 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Pencari Kerja - Cari Kerja.com</title>
     <link rel="stylesheet" href="assets/css/dashboard-worker.css">
-    <link rel="stylesheet" href="assets/css/footer.css">
+    <link rel="stylesheet" href="assets/css/global-styles.css">
     <link rel="stylesheet" href="assets/css/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <script src="assets/js/time.js"></script>
 </head>
 <body>
     <header>

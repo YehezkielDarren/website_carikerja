@@ -1,7 +1,7 @@
 <?php
     require '../src/includes/connection.php';
     require_once '../src/includes/helpers.php';
-    session_start();
+    // session_start();
     // validasi login
     if (!isset($_SESSION['username']) || !isset($_SESSION['role'])){
         header("location: login.php");
@@ -74,8 +74,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="assets/css/cek-pelamar.css">
+    <link rel="stylesheet" href="assets/css/global-styles.css">
+    <link rel="stylesheet" href="assets/css/time.css">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png">
     <script src="assets/js/detial-pelamar.js"></script>
+    <script src="assets/js/time.js"></script>
     <title>List Pelamar</title>
 </head>
 <body>
@@ -109,7 +112,19 @@
           ?>
         </a>
       </nav>
-    </header>    
+    </header>   
+    <div class="breadcrumb-bar">
+        <div class="breadcrumb-box"> 
+            <div class="breadcrumb-text-inactive">
+                <a href="index.php">Dashboard</a>
+            </div>
+            <span class="breadcrumb-separator">></span>
+            <div class="breadcrumb-text">
+                <a href="#">Cek-Pelamar</a>
+            </div>
+        </div>
+        <a href="dashboard-company.php" class="btn-back">Kembali</a>
+    </div> 
     <main class="main-content">
         <div class="applicant-details-container" id="applicantDetailsContainer">
             <div class="details-placeholder" id="detailsPlaceholder">

@@ -105,8 +105,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="assets/css/index.css" />
     <link rel="stylesheet" href="assets/css/time.css" />
-    <link rel="icon" type="image/png" href="assets/img/LogoHeader1.png"/>
-    <link rel="stylesheet" href="assets/css/footer.css" />
+    <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
+    <link rel="stylesheet" href="assets/css/global-styles.css" />
+    <script src="assets/js/search-filter.js></script>
     <script src="assets/js/time.js"></script>
     <title>Home - Cari Kerja.com</title>
   </head>
@@ -117,7 +118,7 @@
     </div>
     <header>
       <div class="logo">
-        <img src="assets/img/LogoHeader1.png" alt="logokerja" />
+        <img src="img/LogoHeader1.png" alt="logokerja" />
         <a>Cari Kerja. <span class="small">com</span></a>
       </div>
       <nav>
@@ -136,10 +137,6 @@
         </ul>
         <a href="dashboard-worker.php">
           <?php
-            // Path untuk logo dinamis dari session perlu diperhatikan
-            // Jika $_SESSION['logo'] menyimpan path seperti 'uploads_img/file.png'
-            // dan sekarang file ada di 'public/uploads/file.png', maka perlu penyesuaian saat penyimpanan ke session
-            // atau saat pengambilan. Untuk sekarang, asumsikan path di session sudah benar relatif ke public/
             if(isset($_SESSION['logo']) && !empty($_SESSION['logo']) && file_exists($_SESSION['logo'])) { // Cek file exists
               echo '<img src="' . htmlspecialchars($_SESSION['logo']) . '" alt="profilepict" class="profilepicture" />';
             } else {
@@ -218,8 +215,14 @@
       </section>
       <section id="welcome">
         <div class="breadcrumb-bar">
-          <div class="breadcrumb-text">
-             <?= generateBreadcrumb(); // Memanggil fungsi dari helpers.php ?>
+          <div class="breadcrumb-box">
+            <div class="breadcrumb-text-inactive">
+                  <a href="dashboard-worker.php">Dashboard</a>
+            </div>  
+            <span class="separator-breadcrumb">></span>
+            <div class="breadcrumb-text">
+                <a href="#">Home</a>
+            </div>
           </div>
         </div>
         <?php
