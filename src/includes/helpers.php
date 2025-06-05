@@ -116,13 +116,13 @@ function getUploadErrorMessage($errorCode) {
     }
 }
 
-function simpanFile($file, $maxSize, $desiredFilename, array $allowedExtensions, array $allowedMimeTypes) {
-    if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
-        return ['status' => false, 'message' => getUploadErrorMessage($file['error'] ?? UPLOAD_ERR_NO_FILE), 'path' => null];
+function simpanFile($file, $maxSize, $desiredFilenameWithoutPath, array $allowedExtensions, array $allowedMimeTypes) {
+    if (!isset($file['error']) || !is_array($file) || $file['error'] !== UPLOAD_ERR_OK) {
+        return ['status' => false, 'message' => getUploadErrorMessage($file['error'] ?? UPLOAD_ERR_NO_FILE), 'tmp_name' => null, 'validated_filename' => null];
     }
 
     if ($file['size'] > $maxSize) {
-        return ['status' => false, 'message' => 'Ukuran file terlalu besar. Maksimal ' . ($maxSize / 1000000) . 'MB.', 'path' => null];
+        return ['status' => false, 'message' => 'Ukuran file terlalu besar. Maksimal ' . ($maxSize / 1000000) . 'MB.', 'tmp_name' => null, 'validated_filename' => null];
     }
 
     $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -138,51 +138,22 @@ function simpanFile($file, $maxSize, $desiredFilename, array $allowedExtensions,
     } elseif (function_exists('mime_content_type')) {
         $mimeType = mime_content_type($file['tmp_name']);
     } else {
-        return ['status' => false, 'message' => 'Tidak dapat memverifikasi tipe file (fungsi MIME tidak tersedia).', 'path' => null];
+        return ['status' => false, 'message' => 'Tidak dapat memverifikasi tipe file (fungsi MIME tidak tersedia).', 'tmp_name' => null, 'validated_filename' => null];
     }
 
     if (!in_array($mimeType, $allowedMimeTypes)) {
-        return ['status' => false, 'message' => 'Tipe file (MIME) tidak valid (' . htmlspecialchars($mimeType) . '). Pastikan file tidak korup dan sesuai dengan ekstensinya.', 'path' => null];
+        return ['status' => false, 'message' => 'Tipe file (MIME) tidak valid (' . htmlspecialchars($mimeType) . '). Pastikan file tidak korup dan sesuai dengan ekstensinya.', 'tmp_name' => null, 'validated_filename' => null];
     }
 
-    // $targetDir adalah relatif terhadap root proyek, karena kita akan menggunakannya dari file di public/
-    // Pastikan ini mengarah ke 'public/uploads/' dari root proyek.
-    // Karena skrip akan berada di public/, targetnya adalah 'uploads/' relatif terhadap skrip tersebut.
-    $targetDirRelativeFromScript = 'uploads/';
-    // Untuk path yang disimpan di DB, kita ingin itu relatif dari public/ juga.
-    $pathForDb = 'uploads/' . $desiredFilename;
-
-
-    // Path absolut ke direktori uploads dari root file system server
-    // __DIR__ akan menjadi public/namafile.php, jadi __DIR__ . '/../uploads/' akan menjadi public/../uploads/
-    // yang salah. kita ingin __DIR__ . '/uploads/' yang berarti public/uploads/
-    $absoluteTargetDir = __DIR__ . '/' . $targetDirRelativeFromScript; // Jika helpers.php di src/includes, ini salah
-                                                                     // Seharusnya path dihitung dari skrip yang memanggil simpanFile
-
-    // KOREKSI: $targetDir harus relatif dari skrip yang memanggil `simpanFile`.
-    // Jika `apply.php` ada di `public/apply.php`, maka `$targetDir = 'uploads/'` akan menjadi `public/uploads/`. Ini benar.
-    // Path yang disimpan di DB juga harus `uploads/filename.ext`.
-    $targetDirForMove = 'uploads/'; // Relatif dari skrip di public/
-    $finalTargetPath = $targetDirForMove . $desiredFilename;
-
-
-    if (!is_dir($targetDirForMove)) {
-        if (!mkdir($targetDirForMove, 0755, true)) {
-             return ['status' => false, 'message' => 'Gagal membuat direktori uploads: ' . $targetDirForMove, 'path' => null];
-        }
-    }
-
-    if (move_uploaded_file($file['tmp_name'], $finalTargetPath)) {
-        return ['status' => true, 'message' => 'File berhasil disimpan.', 'path' => $finalTargetPath]; // Path yang disimpan di DB
-    } else {
-        // Tambahkan debugging error
-        $error = error_get_last();
-        $message = 'Gagal menyimpan file.';
-        if ($error) {
-            $message .= ' Pesan sistem: ' . $error['message'];
-        }
-        return ['status' => false, 'message' => $message , 'path' => null];
-    }
+    // Semua pemeriksaan lolos, kembalikan nama file sementara dan nama file yang divalidasi
+    return [
+        'status' => true,
+        'message' => 'File siap untuk dipindahkan.',
+        'tmp_name' => $file['tmp_name'],
+        // $desiredFilenameWithoutPath adalah nama file yang bersih dan dihasilkan server seperti "cv_user_timestamp.pdf"
+        // Ekstensi sudah termasuk dalam $desiredFilenameWithoutPath dari apply.php
+        'validated_filename' => $desiredFilenameWithoutPath
+    ];
 }
 
 ?>

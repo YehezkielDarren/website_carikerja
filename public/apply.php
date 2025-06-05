@@ -3,10 +3,8 @@
   require_once '../src/includes/connection.php'; // Updated
   require_once '../src/includes/helpers.php';   // Updated
 
-  $pesan_cv = "";
-  $pesan_portofolio = "";
-  $pesan_surat_lamaran = "";
-  $pesan = "";
+  $errors = []; // Array untuk menampung semua pesan error
+  $pesan_display = ""; // Variabel untuk menampilkan pesan error di HTML
   $id = $_GET['id'] ?? ""; // lowongan id
   $nama_session_user = $_SESSION['username'] ?? "";
   $id_pelamar = $_SESSION['id'] ?? ""; 
@@ -42,7 +40,7 @@
           }
           mysqli_stmt_close($stmt_check_applied);
       } else {
-          $pesan = "Gagal memeriksa status lamaran: " . mysqli_error($conn);
+          $errors[] = "Gagal memeriksa status lamaran: " . mysqli_error($conn);
       }
   }
 
@@ -54,10 +52,10 @@
     $pencari_kerja_id_post = filter_input(INPUT_POST, 'pencari_kerja_id', FILTER_VALIDATE_INT);
 
     if (!$lowongan_id_post || !$pencari_kerja_id_post) {
-        $pesan = "ID Lowongan atau ID Pelamar tidak valid.";
+        $errors[] = "ID Lowongan atau ID Pelamar tidak valid.";
     } else if ($pencari_kerja_id_post != $id_pelamar) {
         // Keamanan tambahan: pastikan ID pelamar dari form sama dengan dari session
-        $pesan = "Kesalahan identitas pelamar.";
+        $errors[] = "Kesalahan identitas pelamar.";
     } else {
         $raw_nama_lengkap = $_POST['nama_lengkap'] ?? 'pelamar';
         $safe_nama_pelamar = str_replace(' ', '_', $raw_nama_lengkap);
@@ -70,15 +68,15 @@
         $tanggal_lahir_db = mysqli_real_escape_string($conn, $_POST['tanggal_lahir']);
         $email_db = mysqli_real_escape_string($conn, trim($_POST['email']));
         $no_hp_db = mysqli_real_escape_string($conn, trim($_POST['nomor_hp']));
-        // $tanggal_lamaran akan di-default oleh DB atau NOW() saat insert
 
-        // Simpan file CV (wajib)
-        // Path penyimpanan file di 'public/uploads/'
-        // Fungsi simpanFile akan menangani path relatif dari 'public/apply.php' ke 'public/uploads/'
-        $cvResult = ['status' => false, 'message' => 'CV wajib diunggah.', 'path' => null];
+        $cv_file_info = null;
+        $portofolio_file_info = null;
+        $surat_lamaran_file_info = null;
+        $upload_base_dir = 'uploads/';
+
+        // Validasi file CV (wajib)
         if (!empty($_FILES['cv']['name']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
             $cvExtension = strtolower(pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION));
-            // Nama file unik dengan timestamp untuk menghindari konflik
             $cvFilename = "cv_" . $safe_nama_pelamar . "_" . time() . "." . $cvExtension;
             $cvResult = simpanFile(
                 $_FILES['cv'],
@@ -87,16 +85,22 @@
                 ['pdf', 'docx'],
                 ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
             );
-            if (!$cvResult['status']) $pesan_cv = $cvResult['message'];
+            if (!$cvResult['status']) {
+                $errors[] = "CV: " . $cvResult['message'];
+            } else {
+                $cv_file_info = [
+                    'tmp_name' => $cvResult['tmp_name'],
+                    'db_path' => $upload_base_dir . $cvResult['validated_filename'],
+                    'target_move_path' => $upload_base_dir . $cvResult['validated_filename']
+                ];
+            }
         } elseif (!empty($_FILES['cv']['name']) && $_FILES['cv']['error'] !== UPLOAD_ERR_OK) {
-            $pesan_cv = getUploadErrorMessage($_FILES['cv']['error']);
+            $errors[] = "CV: " . getUploadErrorMessage($_FILES['cv']['error']);
         } else {
-            $pesan_cv = "CV wajib diunggah dan tidak boleh kosong.";
+            $errors[] = "CV wajib diunggah dan tidak boleh kosong.";
         }
 
-        // Simpan file portofolio jika ada (opsional)
-        $portofolioPath = null;
-        $portoResult = ['status' => true];
+        // Validasi file portofolio jika ada (opsional)
         if (!empty($_FILES['portofolio']['name'])) {
             if ($_FILES['portofolio']['error'] === UPLOAD_ERR_OK) {
                 $portoExtension = strtolower(pathinfo($_FILES['portofolio']['name'], PATHINFO_EXTENSION));
@@ -105,20 +109,24 @@
                     $_FILES['portofolio'],
                     5000000, // 5MB
                     $portoFilename,
-                    ['pdf'], // Hanya PDF untuk portofolio
+                    ['pdf'],
                     ['application/pdf']
                 );
-                if (!$portoResult['status']) $pesan_portofolio = $portoResult['message'];
-                else $portofolioPath = $portoResult['path']; // Path relatif dari 'public/uploads/'
+                if (!$portoResult['status']) {
+                    $errors[] = "Portofolio: " . $portoResult['message'];
+                } else {
+                    $portofolio_file_info = [
+                        'tmp_name' => $portoResult['tmp_name'],
+                        'db_path' => $upload_base_dir . $portoResult['validated_filename'],
+                        'target_move_path' => $upload_base_dir . $portoResult['validated_filename']
+                    ];
+                }
             } else {
-                $pesan_portofolio = getUploadErrorMessage($_FILES['portofolio']['error']);
-                $portoResult['status'] = false;
+                $errors[] = "Portofolio: " . getUploadErrorMessage($_FILES['portofolio']['error']);
             }
         }
 
-        // Simpan file surat lamaran jika ada (opsional)
-        $suratPath = null;
-        $suratResult = ['status' => true];
+        // Validasi file surat lamaran jika ada (opsional)
         if (!empty($_FILES['surat_lamaran']['name'])) {
             if ($_FILES['surat_lamaran']['error'] === UPLOAD_ERR_OK) {
                 $suratExtension = strtolower(pathinfo($_FILES['surat_lamaran']['name'], PATHINFO_EXTENSION));
@@ -130,40 +138,74 @@
                     ['pdf', 'docx'],
                     ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
                 );
-                if (!$suratResult['status']) $pesan_surat_lamaran = $suratResult['message'];
-                else $suratPath = $suratResult['path']; // Path relatif dari 'public/uploads/'
+                if (!$suratResult['status']) {
+                    $errors[] = "Surat Lamaran: " . $suratResult['message'];
+                } else {
+                    $surat_lamaran_file_info = [
+                        'tmp_name' => $suratResult['tmp_name'],
+                        'db_path' => $upload_base_dir . $suratResult['validated_filename'],
+                        'target_move_path' => $upload_base_dir . $suratResult['validated_filename']
+                    ];
+                }
             } else {
-                $pesan_surat_lamaran = getUploadErrorMessage($_FILES['surat_lamaran']['error']);
-                $suratResult['status'] = false;
+                $errors[] = "Surat Lamaran: " . getUploadErrorMessage($_FILES['surat_lamaran']['error']);
             }
         }
-        
-        if (empty($pesan)) { // Hanya proses jika tidak ada error validasi ID sebelumnya
-            if ($cvResult['status'] && $portoResult['status'] && $suratResult['status']) {
-                // Pastikan $cvResult['path'], $portofolioPath, $suratPath adalah path yang benar untuk DB
-                // (misalnya 'uploads/cv_nama_timestamp.pdf')
-                $query2 = "INSERT INTO lamaran (lowongan_id, pelamar_id, nama_lengkap, tanggal_lahir, email, no_hp, cv, portofolio, surat_lamaran, tanggal_lamaran)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())"; // tanggal_lamaran dihandle DB/NOW()
-                $stmt2 = mysqli_prepare($conn, $query2);
-                // Bind parameter $lowongan_id_post, $pencari_kerja_id_post
-                mysqli_stmt_bind_param($stmt2, "iisssssss", $lowongan_id_post, $pencari_kerja_id_post, $nama_lengkap_db, $tanggal_lahir_db, $email_db, $no_hp_db, $cvResult['path'], $portofolioPath, $suratPath);
-                
-                if (mysqli_stmt_execute($stmt2)) {
+
+        if (empty($errors)) { // Hanya proses jika tidak ada error validasi sebelumnya
+            $cv_db_path_to_store = $cv_file_info['db_path'] ?? null;
+            $portofolio_db_path_to_store = $portofolio_file_info['db_path'] ?? null;
+            $surat_lamaran_db_path_to_store = $surat_lamaran_file_info['db_path'] ?? null;
+
+            $query2 = "INSERT INTO lamaran (lowongan_id, pelamar_id, nama_lengkap, tanggal_lahir, email, no_hp, cv, portofolio, surat_lamaran, tanggal_lamaran)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            $stmt2 = mysqli_prepare($conn, $query2);
+            mysqli_stmt_bind_param($stmt2, "iisssssss", $lowongan_id_post, $pencari_kerja_id_post, $nama_lengkap_db, $tanggal_lahir_db, $email_db, $no_hp_db, $cv_db_path_to_store, $portofolio_db_path_to_store, $surat_lamaran_db_path_to_store);
+            
+            if (mysqli_stmt_execute($stmt2)) {
+                // Data berhasil masuk DB, sekarang pindahkan file
+                $files_moved_successfully = true;
+                if (!is_dir($upload_base_dir)) {
+                    if (!mkdir($upload_base_dir, 0755, true)) {
+                        $errors[] = "Gagal membuat direktori uploads: " . $upload_base_dir;
+                        $files_moved_successfully = false;
+                    }
+                }
+
+                if ($files_moved_successfully && $cv_file_info) {
+                    if (!move_uploaded_file($cv_file_info['tmp_name'], $cv_file_info['target_move_path'])) {
+                        $errors[] = "Gagal menyimpan file CV.";
+                        $files_moved_successfully = false;
+                    }
+                }
+                if ($files_moved_successfully && $portofolio_file_info) {
+                    if (!move_uploaded_file($portofolio_file_info['tmp_name'], $portofolio_file_info['target_move_path'])) {
+                        $errors[] = "Gagal menyimpan file Portofolio.";
+                        $files_moved_successfully = false;
+                    }
+                }
+                if ($files_moved_successfully && $surat_lamaran_file_info) {
+                    if (!move_uploaded_file($surat_lamaran_file_info['tmp_name'], $surat_lamaran_file_info['target_move_path'])) {
+                        $errors[] = "Gagal menyimpan file Surat Lamaran.";
+                        $files_moved_successfully = false;
+                    }
+                }
+
+                if ($files_moved_successfully) {
                     header("Location: index.php?apply_status=success");
                     exit();
                 } else {
-                    $pesan = "Gagal menyimpan lamaran: " . mysqli_error($conn) . " (Query: " . $query2 . ")";
+                    // DB insert OK, tapi pemindahan file gagal. $errors sudah berisi pesan error file.
                 }
-                mysqli_stmt_close($stmt2);
             } else {
-                if (empty($pesan)) {
-                     $pesan = "Gagal menyimpan file. Periksa kembali file yang diunggah.";
-                     if(!$cvResult['status']) $pesan .= " Error CV: " . $pesan_cv;
-                     if(!$portoResult['status'] && !empty($_FILES['portofolio']['name'])) $pesan .= " Error Portofolio: " . $pesan_portofolio;
-                     if(!$suratResult['status'] && !empty($_FILES['surat_lamaran']['name'])) $pesan .= " Error Surat Lamaran: " . $pesan_surat_lamaran;
-                }
+                $errors[] = "Gagal menyimpan lamaran ke database: " . mysqli_error($conn);
             }
+            if ($stmt2) mysqli_stmt_close($stmt2);
         }
+    }
+    // Jika ada error dari validasi awal atau proses di atas
+    if (!empty($errors)) {
+        $pesan_display = implode("<br>", array_map('htmlspecialchars', $errors));
     }
 }
       
@@ -187,17 +229,17 @@
               $data_lowongan = mysqli_fetch_assoc($result_lowongan_detail);
               $syarat = explode("; ", $data_lowongan['syarat'] ?? '');
           } else {
-              $pesan = "Pekerjaan tidak ditemukan!";
+              $pesan_display = "Pekerjaan tidak ditemukan!"; // Gunakan variabel display
               // Opsional: redirect jika pekerjaan tidak ada setelah submit dicegah
               // header("Location: index.php?pesan=" . urlencode($pesan));
               // exit();
           }
           mysqli_stmt_close($stmt_lowongan_detail);
       } else {
-          $pesan = "Gagal mengambil detail lowongan: " . mysqli_error($conn);
+          $pesan_display = "Gagal mengambil detail lowongan: " . mysqli_error($conn);
       }
   } else if (empty($id) && !isset($_POST['submit'])) { // Hanya redirect jika bukan POST dan ID kosong
-      $pesan = "ID Pekerjaan tidak valid.";
+      $pesan_display = "ID Pekerjaan tidak valid.";
       header("Location: index.php?pesan=" . urlencode($pesan));
       exit();
   }
@@ -215,7 +257,7 @@
           $data_pencari_kerja = mysqli_fetch_assoc($result_pencari);
           mysqli_stmt_close($stmt_pencari);
       } else {
-          $pesan = "Gagal mengambil data pelamar: " . mysqli_error($conn);
+          $pesan_display = "Gagal mengambil data pelamar: " . mysqli_error($conn); // Gunakan variabel display
       }
   }
 
@@ -236,7 +278,7 @@
   <body>
     <header>
       <div class="logo">
-        <img src="assets/img/LogoHeader1.png" alt="logokerja" />
+        <img src="img/LogoHeader1.png" alt="logokerja" />
         <a>Cari Kerja. <span class="small">com</span></a>
       </div>
       <nav>
@@ -257,25 +299,16 @@
               if(isset($_SESSION['logo']) && !empty($_SESSION['logo']) && file_exists($_SESSION['logo'])) {
                 echo '<img src="' . htmlspecialchars($_SESSION['logo']) . '" alt="profilepict" class="profilepicture" />';
               } else {
-                echo '<img src="assets/img/ProfilePicture.jpg" alt="profilepict" class="profilepicture" />';
+                echo '<img src="img/ProfilePicture.jpg" alt="profilepict" class="profilepicture" />';
               }
           ?>
         </a>
       </nav>
     </header>
     <main>
-      <div class="alert alert-danger" style="display: <?= empty($pesan) ? 'none' : 'block'; ?>;">
-        <?= htmlspecialchars($pesan); ?>
-      </div>
-      <div class="alert alert-danger" style="display: <?= empty($pesan_cv) ? 'none' : 'block'; ?>;">
-        <?= htmlspecialchars($pesan_cv); ?>
-      </div>
-      <div class="alert alert-danger" style="display: <?= empty($pesan_portofolio) ? 'none' : 'block'; ?>;">
-        <?= htmlspecialchars($pesan_portofolio); ?>
-      </div>
-      <div class="alert alert-danger" style="display: <?= empty($pesan_surat_lamaran) ? 'none' : 'block'; ?>;">
-        <?= htmlspecialchars($pesan_surat_lamaran); ?>
-      </div>
+        <?php if (!empty($pesan_display)): ?>
+            <div class="alert alert-danger" style="margin-bottom: 15px; padding: 10px; border-radius: 4px; border: 1px solid transparent; color: #a94442; background-color: #f2dede; border-color: #ebccd1; text-align: left;"><?= $pesan_display; ?></div>
+        <?php endif; ?>
 
       <div class="clock-container">
         <div class="clock-time" id="clock">00:00:00</div>

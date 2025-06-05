@@ -140,7 +140,7 @@
             if(isset($_SESSION['logo']) && !empty($_SESSION['logo']) && file_exists($_SESSION['logo'])) { // Cek file exists
               echo '<img src="' . htmlspecialchars($_SESSION['logo']) . '" alt="profilepict" class="profilepicture" />';
             } else {
-              echo '<img src="assets/img/ProfilePicture.jpg" alt="profilepict" class="profilepicture" />'; // Default
+              echo '<img src="img/ProfilePicture.jpg" alt="profilepict" class="profilepicture" />'; // Default
             }
           ?>
         </a>
@@ -265,7 +265,7 @@
             foreach ($jobListFilter as $job): ?>
           <div class="job-box">
             <img
-              src="<?= (isset($job['logo']) && !empty($job['logo']) && file_exists($job['logo'])) ? htmlspecialchars($job['logo']) : 'assets/img/ProfilePicture.jpg' ?>"
+              src="<?= (isset($job['logo']) && !empty($job['logo']) && file_exists($job['logo'])) ? htmlspecialchars($job['logo']) : 'img/ProfilePicture.jpg' ?>"
               class="job-image"
               alt="<?= htmlspecialchars($job['nama_perusahaan']) ?>"
             />
