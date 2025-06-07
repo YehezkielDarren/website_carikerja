@@ -52,40 +52,40 @@ function potongDeskripsi($teks, $jumlahKata = 20) {
     }
 }
 
-function generateBreadcrumb() {
-    $path = $_SERVER['PHP_SELF'];
-    $pathParts = explode('/', trim($path, '/'));
-    // Karena semua file ada di public/, kita bisa hapus 'public' dari breadcrumb jika muncul
-    if (isset($pathParts[0]) && strtolower($pathParts[0]) === 'public') {
-        array_shift($pathParts); // Hapus 'public'
-    }
+// function generateBreadcrumb() {
+//     $path = $_SERVER['PHP_SELF'];
+//     $pathParts = explode('/', trim($path, '/'));
+//     // Karena semua file ada di public/, kita bisa hapus 'public' dari breadcrumb jika muncul
+//     if (isset($pathParts[0]) && strtolower($pathParts[0]) === 'public') {
+//         array_shift($pathParts); // Hapus 'public'
+//     }
 
-    $breadcrumb = '<div class="breadcrumb"><p>';
-    $link = '/'; // Mulai dari root web
+//     $breadcrumb = '<div class="breadcrumb"><p>';
+//     $link = '/'; // Mulai dari root web
 
-    foreach ($pathParts as $index => $part) {
-        // Jika path part adalah nama file, jangan sertakan dalam link path selanjutnya
-        if (strpos($part, '.php') !== false && $index < count($pathParts) -1 ) {
-             $link .= $part;
-        } else if (strpos($part, '.php') === false) {
-            $link .= $part . '/';
-        }
+//     foreach ($pathParts as $index => $part) {
+//         // Jika path part adalah nama file, jangan sertakan dalam link path selanjutnya
+//         if (strpos($part, '.php') !== false && $index < count($pathParts) -1 ) {
+//              $link .= $part;
+//         } else if (strpos($part, '.php') === false) {
+//             $link .= $part . '/';
+//         }
 
 
-        $name = ($part === 'index.php') ? 'Home' : ucfirst(str_replace(['.php', '-', '_'], ['', ' ', ' '], $part));
+//         $name = ($part === 'index.php') ? 'Home' : ucfirst(str_replace(['.php', '-', '_'], ['', ' ', ' '], $part));
 
-        if ($index < count($pathParts) - 1) {
-            // Pastikan link benar, jika file ada di root public, linknya langsung nama file
-            $current_link = (count($pathParts) == 1 || $index == 0 && strpos($pathParts[$index+1], '.php') !== false) ? $part : rtrim($link, '/');
-             if ($part === 'index.php') $current_link = '/'; // Home selalu ke root
-            $breadcrumb .= '<a href="' . ($current_link ?: '/') . '">' . $name . '</a> / ';
-        } else {
-            $breadcrumb .= $name; // Bagian terakhir sebagai teks
-        }
-    }
-    $breadcrumb .= '</p></div>';
-    return $breadcrumb;
-}
+//         if ($index < count($pathParts) - 1) {
+//             // Pastikan link benar, jika file ada di root public, linknya langsung nama file
+//             $current_link = (count($pathParts) == 1 || $index == 0 && strpos($pathParts[$index+1], '.php') !== false) ? $part : rtrim($link, '/');
+//              if ($part === 'index.php') $current_link = '/'; // Home selalu ke root
+//             $breadcrumb .= '<a href="' . ($current_link ?: '/') . '">' . $name . '</a> / ';
+//         } else {
+//             $breadcrumb .= $name; // Bagian terakhir sebagai teks
+//         }
+//     }
+//     $breadcrumb .= '</p></div>';
+//     return $breadcrumb;
+// }
 
 
 function getTanggalSekarang() {

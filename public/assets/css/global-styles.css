@@ -9,6 +9,9 @@
 body::-webkit-scrollbar {
   display: none;
 }
+body {
+  width: 100%;
+}
 /* bagian header -> meliputi home, login, dan logo website*/
 header {
   background: linear-gradient(to right, #1f1c2c, #928dab);
@@ -20,6 +23,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid grey;
   z-index: 100;
 }
@@ -127,7 +131,7 @@ nav a img:hover {
   font-weight: normal;
 }
 .separator-breadcrumb {
-  color:#6a6a6a;
+  color: #6a6a6a;
 }
 
 .btn-back {

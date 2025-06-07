@@ -79,9 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
     <link rel="stylesheet" href="assets/css/global-styles.css" />
+    <link rel="stylesheet" href="assets/css/file-upload.css" />
     <link rel="stylesheet" href="assets/css/time.css" />
     <script src="assets/js/script.js"></script>
     <script src="assets/js/time.js"></script>
+    <script src="assets/js/file-upload.js" defer></script>
 </head>
 <body>
     <header>
@@ -124,9 +126,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class='bx bx-show toggle-password' onclick="showPassword()"></i>
                 </div>
 
-                <div class="foto">
-                    <label for="foto" style="color: white;">Upload Foto (opsional)</label>
-                    <input type="file" name="foto" id="foto" accept="image/*">
+                <div class="form-group">
+                    <label style="color: white;">Upload Foto (opsional)</label>
+                    <div class="file-upload-wrapper">
+                        <label for="foto" class="file-upload-label">
+                            <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                            <div class="file-upload-text">Drag file here or <span class="browse-link">browse</span></div>
+                        </label>
+                        <input type="file" id="foto" name="foto" class="file-upload-input" accept="image/*">
+                        <div class="file-name-display"></div>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn" onclick="showAlert('<?= $pesan ?>')">Daftar</button>

@@ -1,0 +1,55 @@
+.file-upload-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 15px 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.file-upload-label {
+  display: block;
+  border: 2px dashed #0c4bbf;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.file-upload-label:hover {
+  background-color: #f0f4ff;
+  border-color: #073a89;
+}
+
+.file-upload-icon {
+  font-size: 40px;
+  color: #0c4bbf;
+  margin-bottom: 15px;
+}
+
+.file-upload-text {
+  color: #555;
+  font-size: 16px;
+}
+
+.file-upload-text .browse-link {
+  color: #0c4bbf;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-name-display {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  background-color: #e9ecef;
+  padding: 8px 12px;
+  border-radius: 5px;
+  display: none; /* Sembunyikan secara default */
+  text-align: center;
+}

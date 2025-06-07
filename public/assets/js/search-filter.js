@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchInput && jobContainer) {
         searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase().trim();
-            const jobBoxes = jobContainer.querySelectorAll('.job-box'); // Ambil semua job-box di dalam container
+            const jobBoxes = jobContainer.querySelectorAll('.job-box');
             let found = false;
-
+            
             jobBoxes.forEach(function (jobBox) {
                 const jobTitleElement = jobBox.querySelector('.job-title');
                 if (jobTitleElement) {

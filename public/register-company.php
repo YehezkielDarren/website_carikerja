@@ -84,9 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
     <link rel="stylesheet" href="assets/css/time.css" />
+    <link rel="stylesheet" href="assets/css/file-upload.css">
     <link rel="stylesheet" href="assets/css/global-styles.css" />
     <script src="assets/js/script.js"></script>
     <script src="assets/js/time.js"></script>
+    <script src="assets/js/file-upload.js" defer></script>
 </head>
 <body>
     <header>
@@ -121,11 +123,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="lokasi" placeholder="Lokasi Perusahaan" required>
                 </div>
 
-                <div class="input-box">
-                    <label for="logo">Logo Perusahaan:</label><br>
-                    <input type="file" name="logo" id="logo" accept="image/*" required>
+                <div class="form-group">
+                    <label style="color: white;">Upload Foto (opsional)</label>
+                    <div class="file-upload-wrapper">
+                        <label for="foto" class="file-upload-label">
+                            <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                            <div class="file-upload-text">Drag file here or <span class="browse-link">browse</span></div>
+                        </label>
+                        <input type="file" id="foto" name="foto" class="file-upload-input" accept="image/*">
+                        <div class="file-name-display"></div>
+                    </div>
                 </div>
-
                 <button type="submit" class="btn">Daftar</button>
 
                 <div class="register-link">

@@ -272,7 +272,9 @@
     <link rel="stylesheet" href="assets/css/global-styles.css" />
     <link rel="stylesheet" href="assets/css/apply.css" />
     <link rel="stylesheet" href="assets/css/time.css" />
+    <link rel="stylesheet" href="assets/css/file-upload.css" />
     <script src="assets/js/time.js"></script>
+    <script src="assets/js/file-upload.js" defer></script>
     <title>Apply - Cari Kerja.com</title>
   </head>
   <body>
@@ -327,8 +329,9 @@
             </div>  
             <span class="separator-breadcrumb">></span>
             <div class="breadcrumb-text-inactive">
-              <a href="#">Detail</a>
+              <a href="detail.php">Detail</a>
             </div>
+            <span class="separator-breadcrumb">></span>
             <div class="breadcrumb-text">
               <a href="#">Apply</a>
             </div>
@@ -367,7 +370,8 @@
         <div class="apply-section">
             <h2>Apply Pekerjaan</h2>
             <form action="apply.php?id=<?= htmlspecialchars($id) ?>" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="pencari_kerja_id" value="<?= htmlspecialchars($id_pelamar) ?>"> <input type="hidden" name="lowongan_id" value="<?= htmlspecialchars($id) ?>"> <div class="form-group">
+                <input type="hidden" name="pencari_kerja_id" value="<?= htmlspecialchars($id_pelamar) ?>"> <input type="hidden" name="lowongan_id" value="<?= htmlspecialchars($id) ?>"> 
+                <div class="form-group">
                   <label for="nama_lengkap">Nama Lengkap</label>
                   <input type="text" id="nama_lengkap" name="nama_lengkap" required value="<?= isset($data_pencari_kerja['nama_lengkap']) ? htmlspecialchars($data_pencari_kerja['nama_lengkap']): htmlspecialchars($_POST['nama_lengkap'] ?? '') ?> ">
                 </div>
@@ -384,18 +388,39 @@
                   <input type="text" id="nomor_hp" name="nomor_hp" value="<?= isset($data_pencari_kerja['no_hp']) ? htmlspecialchars($data_pencari_kerja['no_hp']): htmlspecialchars($_POST['nomor_hp'] ?? '') ?>" required pattern="[0-9]+">
                 </div>
                 <div class="form-group">
-                  <label for="cv">CV (PDF/DOCX, max 5 MB)</label>
-                  <input type="file" id="cv" name="cv" accept=".pdf,.docx" required>
+                  <label for="cv">CV (PDF/DOCX, max 5 MB)<span style="color:red;">*</span></label>
+                  <div class="file-upload-wrapper">
+                    <label for="cv" class="file-upload-label">
+                      <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                      <div class="file-upload-text">Drag file here or <span class="browse-link">browse</span></div>
+                    </label>
+                    <input type="file" id="cv" name="cv" accept=".pdf,.docx" required>
+                    <div class="file-name-display"></div>
+                  </div>
                 </div>
                 <?php if (isset($data_lowongan['isPorto']) && $data_lowongan['isPorto']==1): ?>
                 <div class="form-group">
                   <label for="portofolio">Portofolio (PDF, max 5 MB)</label>
-                  <input type="file" id="portofolio" name="portofolio" accept=".pdf" >
+                  <div class="file-upload-wrapper">
+                    <label for="cv" class="file-upload-label">
+                      <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                      <div class="file-upload-text">Drag file here or <span class="browse-link">browse</span></div>
+                    </label>
+                    <input type="file" id="portofolio" name="portofolio" accept=".pdf" >
+                    <div class="file-name-display"></div>
+                  </div>
                 </div>
                 <?php endif;?>
                 <div class="form-group">
-                  <label for="surat_lamaran">Surat Lamaran (PDF/DOCX, max 5 MB)</label>
-                  <input type="file" id="surat_lamaran" name="surat_lamaran" accept=".pdf,.docx">
+                  <label for="surat_lamaran">Surat Lamaran (PDF/DOCX, max 5 MB)<span style="color:red;">*</span></label>
+                  <div class="file-upload-wrapper">
+                    <label for="cv" class="file-upload-label">
+                      <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                      <div class="file-upload-text">Drag file here or <span class="browse-link">browse</span></div>
+                    </label>
+                    <input type="file" id="surat_lamaran" name="surat_lamaran" accept=".pdf,.docx" required>
+                    <div class="file-name-display"></div>
+                  </div>
                 </div>
                 <button type="submit" name="submit" value="submit" class="btn-apply">Kirim Lamaran</button>
             </form>

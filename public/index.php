@@ -107,7 +107,7 @@
     <link rel="stylesheet" href="assets/css/time.css" />
     <link rel="icon" type="image/png" href="img/LogoHeader1.png"/>
     <link rel="stylesheet" href="assets/css/global-styles.css" />
-    <script src="assets/js/search-filter.js></script>
+    <script src="assets/js/search-filter.js"></script>
     <script src="assets/js/time.js"></script>
     <title>Home - Cari Kerja.com</title>
   </head>
