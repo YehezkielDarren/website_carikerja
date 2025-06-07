@@ -76,8 +76,8 @@
             if (mysqli_num_rows($res_cek_nama) > 0) {
                 $pesan_operasi = "Lowongan dengan nama pekerjaan tersebut sudah ada untuk perusahaan Anda.";
             } else {
-                $sql_insert = "INSERT INTO lowongan (perusahaan_id, nama_pekerjaan, jenis_pekerjaan, kategori, lokasi, gaji, deskripsi, syarat, tanggal_batas, isPorto, tanggal_dibuat) 
-                               VALUES ('$user_id', '$nama_pekerjaan_tambah', '$jenis_pekerjaan_tambah', '$kategori_tambah', '$lokasi_tambah', '$gaji_tambah', '$deskripsi_tambah', '$syarat_tambah', '$tanggal_batas_tambah', '$isPorto_tambah', NOW())";
+                $sql_insert = "INSERT INTO lowongan (perusahaan_id, nama_pekerjaan, jenis_pekerjaan, kategori, lokasi, gaji, deskripsi, syarat, tanggal_batas, isPorto) 
+                               VALUES ('$user_id', '$nama_pekerjaan_tambah', '$jenis_pekerjaan_tambah', '$kategori_tambah', '$lokasi_tambah', '$gaji_tambah', '$deskripsi_tambah', '$syarat_tambah', '$tanggal_batas_tambah', '$isPorto_tambah')";
                 if (mysqli_query($conn, $sql_insert)) {
                     header("Location: dashboard-company.php?tambah_status=success");
                     exit();
