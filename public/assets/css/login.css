@@ -6,9 +6,16 @@ main {
   padding: 50px 20px;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+}
+
 .wrapper {
   width: 420px;
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to right, #1f1c2c, #928dab);
   border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(15px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
@@ -194,7 +201,11 @@ main {
 
 /* footer */
 footer {
-  background: linear-gradient(to right, #1f1c2c, #928dab); /* Warna latar belakang footer */
+  background: linear-gradient(
+    to right,
+    #1f1c2c,
+    #928dab
+  ); /* Warna latar belakang footer */
   color: white; /* Warna teks default di footer */
   text-align: center;
   padding: 20px 15px; /* Padding atas/bawah dan kiri/kanan */
