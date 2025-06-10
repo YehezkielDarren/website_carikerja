@@ -68,6 +68,8 @@
         $syarat_tambah = mysqli_real_escape_string($conn, $_POST['syarat']);
         $tanggal_batas_tambah = mysqli_real_escape_string($conn, $_POST['tanggal_batas']);
         $isPorto_tambah = mysqli_real_escape_string($conn, $_POST['isPorto']);
+        $tanggal_sekarang = new DateTime();
+        $tanggal_buat_db = $tanggal_sekarang->format('Y-m-d');
         // $user_id is already defined as $_SESSION['id']
 
         if (!empty($nama_pekerjaan_tambah) && !empty($jenis_pekerjaan_tambah) && !empty($kategori_tambah) && !empty($lokasi_tambah) && !empty($gaji_tambah) && !empty($deskripsi_tambah) && !empty($syarat_tambah) && !empty($tanggal_batas_tambah)) {
@@ -76,8 +78,8 @@
             if (mysqli_num_rows($res_cek_nama) > 0) {
                 $pesan_operasi = "Lowongan dengan nama pekerjaan tersebut sudah ada untuk perusahaan Anda.";
             } else {
-                $sql_insert = "INSERT INTO lowongan (perusahaan_id, nama_pekerjaan, jenis_pekerjaan, kategori, lokasi, gaji, deskripsi, syarat, tanggal_batas, isPorto) 
-                               VALUES ('$user_id', '$nama_pekerjaan_tambah', '$jenis_pekerjaan_tambah', '$kategori_tambah', '$lokasi_tambah', '$gaji_tambah', '$deskripsi_tambah', '$syarat_tambah', '$tanggal_batas_tambah', '$isPorto_tambah')";
+                $sql_insert = "INSERT INTO lowongan (perusahaan_id, nama_pekerjaan, jenis_pekerjaan, kategori, lokasi, gaji, deskripsi, syarat, tanggal_batas, isPorto,tanggal_buat) 
+                               VALUES ('$user_id', '$nama_pekerjaan_tambah', '$jenis_pekerjaan_tambah', '$kategori_tambah', '$lokasi_tambah', '$gaji_tambah', '$deskripsi_tambah', '$syarat_tambah', '$tanggal_batas_tambah', '$isPorto_tambah', '$tanggal_buat_db')";
                 if (mysqli_query($conn, $sql_insert)) {
                     header("Location: dashboard-company.php?tambah_status=success");
                     exit();
@@ -128,6 +130,7 @@
           lowongan.gaji,
           lowongan.deskripsi,
           lowongan.tanggal_batas,
+          lowongan.tanggal_buat,
           perusahaan.nama_perusahaan,
           perusahaan.logo
       FROM lowongan
@@ -165,6 +168,7 @@
             lowongan.gaji,
             lowongan.deskripsi,
             lowongan.tanggal_batas,
+            lowongan.tanggal_buat,
             perusahaan.nama_perusahaan,
             perusahaan.logo
         FROM lowongan
