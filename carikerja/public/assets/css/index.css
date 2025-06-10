@@ -464,11 +464,26 @@ p.job-count-text {
   transition: all 0.3s ease;
 }
 .btn-load-more:hover {
-  background-color: #2A64F2;
-  color: #FFFFFF;
+  background-color: #2a64f2;
+  color: #ffffff;
   transform: translateY(-3px);
   box-shadow: 0 4px 10px rgba(42, 100, 242, 0.2);
 }
 .btn-load-more.hidden {
   display: none;
+}
+.new-job-label {
+  position: absolute;
+  top: 16px; /* Sesuaikan dengan posisi .job-count */
+  left: 16px;
+  background-color: #10b981; /* Warna hijau segar */
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 700;
+  text-transform: uppercase;
+  z-index: 2; /* Pastikan berada di atas gambar */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
 }

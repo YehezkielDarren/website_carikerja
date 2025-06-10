@@ -19,7 +19,7 @@ session_start();
         </div>
         <nav>
             <ul type="none">
-                <li><a href="index.php">Home</a></li>
+                <li><a href="index.php">Home</a></li> <span class="separator"></span>
                 <li><a href="about.php">About</a></li> <span class="separator"></span>
                 <li>
                     <?php

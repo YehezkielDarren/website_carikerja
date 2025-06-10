@@ -22,12 +22,13 @@
             lowongan.gaji,
             lowongan.deskripsi,
             lowongan.tanggal_batas,
+            lowongan.tanggal_buat,
             perusahaan.nama_perusahaan,
             perusahaan.logo
         FROM lowongan
         JOIN perusahaan ON lowongan.perusahaan_id = perusahaan.id
         where tanggal_batas > now()
-        ORDER BY tanggal_batas DESC"; // Typo 'ORder' diperbaiki
+        ORDER BY tanggal_buat DESC"; // Typo 'ORder' diperbaiki
 
   $result = mysqli_query($conn, $sql);
   $jobList = [];
@@ -61,6 +62,7 @@
             lowongan.gaji,
             lowongan.deskripsi,
             lowongan.tanggal_batas,
+            lowongan.tanggal_buat,
             perusahaan.nama_perusahaan,
             perusahaan.logo
         FROM lowongan
@@ -78,8 +80,7 @@
     if (!empty($search_kerja_)) {
         $sql_filter .= " AND lowongan.nama_pekerjaan LIKE '%$search_kerja_%'";
     }
-
-    $sql_filter .= " ORDER BY tanggal_batas DESC";
+    $sql_filter .= " ORDER BY lowongan.tanggal_buat DESC"; // Tambahkan ORDER BY untuk konsistensi
 
     $result_filter = mysqli_query($conn, $sql_filter);
     if ($result_filter && mysqli_num_rows($result_filter) > 0) {
@@ -296,11 +297,24 @@
               }
             ?>
           <div class="job-box <?= $hiddenClass ?>">
+            <?php
+              try{
+                // Logika untuk menampilkan label "Baru" jika lowongan dibuat dalam 7 hari terakhir
+                $tanggal_buat = new DateTime($job['tanggal_buat']);
+                $tanggal_sekarang = new DateTime();
+                $interval = $tanggal_buat->diff($tanggal_sekarang)->days;
+                if ($interval <= 7) {
+                  echo '<span class="new-job-label">Baru</span>';
+                }
+              }catch (Exception $e) {
+                echo '<span class="error-label">Error</span>'; // Menangani error jika ada masalah dengan tanggal
+              }
+            ?>
             <div class="job-count">
               <?php if ($total_lamaran>0): ?>
-                <p class="job-count-text">Total Lamaran: <?= htmlspecialchars($total_lamaran) ?></p>
+                <p class="job-count-text">Total Pelamar: <?= htmlspecialchars($total_lamaran) ?></p>
               <?php else: ?>
-                <p class="job-count-text">Belum ada lamaran</p>
+                <p class="job-count-text">Belum ada pelamar</p>
               <?php endif; ?>
             </div>
             <img
