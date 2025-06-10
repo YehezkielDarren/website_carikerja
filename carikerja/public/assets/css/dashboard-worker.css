@@ -1,0 +1,214 @@
+main {
+  min-height: 100vh;
+  width: 100%;
+  padding: 25px 0; /* Mengubah padding horizontal menjadi 0 */
+  /* max-width: 1100px; */ /* */
+  margin: 30px auto;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 35px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.dashboard-header h1 {
+  color: #1d2939;
+  margin-bottom: 0.4em;
+  font-size: 2.2em;
+}
+.dashboard-header p {
+  font-size: 1.1em;
+  color: #6c757d;
+}
+
+.dashboard-stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 25px;
+  margin-bottom: 35px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background-color: #ffffff;
+  border: 1px solid #eaecf0;
+  border-radius: 8px;
+  padding: 25px;
+  text-align: center;
+  flex: 1; /* Allows cards to grow equally */
+  min-width: 260px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.stat-card h2 {
+  margin-top: 0;
+  color: #495057;
+  font-size: 1.3em;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 2.5em;
+  font-weight: 700;
+  color: #2a64f2;
+  margin: 10px 0 15px 0;
+}
+
+.btn-link {
+  display: inline-block;
+  padding: 10px 18px;
+  background-color: #2a64f2;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-link:hover {
+  background-color: #1e4ab7;
+}
+
+.applied-jobs-list {
+  margin-top: 35px;
+}
+
+.applied-jobs-list h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #343a40;
+  font-size: 1.8em;
+}
+
+.info-message {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.15em;
+  padding: 25px;
+  background-color: #e9ecef;
+  border: 1px dashed #ced4da;
+  border-radius: 5px;
+}
+
+.applied-jobs-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden; /* For border-radius on table */
+}
+
+.applied-jobs-list th,
+.applied-jobs-list td {
+  border-bottom: 1px solid #dee2e6;
+  padding: 15px;
+  text-align: left;
+}
+
+.applied-jobs-list th {
+  background-color: #f9fafb;
+  color: #475467;
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+.applied-jobs-list tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.applied-jobs-list tr:hover {
+  background-color: #e9ecef;
+}
+
+.btn-detail {
+  padding: 7px 14px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 0.95em;
+  transition: background-color 0.2s ease;
+}
+
+.btn-detail:hover {
+  background-color: #1f7a38;
+}
+
+/* Responsive adjustments for table */
+@media (max-width: 768px) {
+  .dashboard-stats {
+    flex-direction: column;
+    align-items: stretch; /* Make cards full width */
+  }
+  .stat-card {
+    margin-bottom: 20px;
+  }
+
+  .applied-jobs-list table,
+  .applied-jobs-list thead,
+  .applied-jobs-list tbody,
+  .applied-jobs-list th,
+  .applied-jobs-list td,
+  .applied-jobs-list tr {
+    display: block;
+  }
+  .applied-jobs-list thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .applied-jobs-list tr {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  .applied-jobs-list td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: right;
+    min-height: 30px; /* Ensure space for pseudo-element */
+    display: flex; /* Align content properly */
+    align-items: center; /* Vertically center content */
+    justify-content: flex-end; /* Align content to the right */
+  }
+  .applied-jobs-list td:before {
+    content: attr(data-label); /* Use data-label for dynamic content */
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: calc(50% - 20px); /* Adjust width */
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    transform: translateY(-50%);
+  }
+  /* Add data-label attributes to your td elements in PHP if using this method,
+       or define them statically if columns are fixed: */
+  .applied-jobs-list td:nth-of-type(1):before {
+    content: "Pekerjaan:";
+  }
+  .applied-jobs-list td:nth-of-type(2):before {
+    content: "Perusahaan:";
+  }
+  .applied-jobs-list td:nth-of-type(3):before {
+    content: "Tgl Lamar:";
+  }
+  .applied-jobs-list td:nth-of-type(4):before {
+    content: "Aksi:";
+  }
+
+  .applied-jobs-list td:last-child {
+    border-bottom: 0; /* No border for the last cell in a "row" */
+  }
+}

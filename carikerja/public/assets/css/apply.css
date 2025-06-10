@@ -1,0 +1,184 @@
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .job-container,
+  .apply-section {
+    width: 100%;
+  }
+}
+/* Bagian main */
+main {
+  background: linear-gradient(to right, #1f1c2c, #928dab);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Pastikan halaman minimal setinggi viewport */
+  padding-bottom: 100px; /* Tambahkan ruang agar footer tidak tertabrak */
+}
+/* Container utama */
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 40px auto;
+  max-width: 1200px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+/* Job Container (kiri) */
+.job-container {
+  flex: 1 1 350px;
+  max-width: 550px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.company-logo {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.company-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.job-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.job-details h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.company-name,
+.location,
+.salary {
+  font-size: 16px;
+  color: #555;
+}
+
+.salary {
+  font-weight: bold;
+  color: #27ae60;
+}
+
+.description,
+.requirements {
+  margin-top: 20px;
+}
+
+.description h2,
+.requirements h4 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.description p,
+.requirements ul {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.requirements ul {
+  padding-left: 20px;
+}
+
+.requirements li {
+  list-style: disc;
+  margin-bottom: 6px;
+}
+
+/* Apply Section (kanan) */
+.apply-section {
+  flex: 1 1 350px;
+  max-width: 550px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+}
+.apply-section h2 {
+  margin-bottom: 20px;
+}
+/* Form style */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #0c4bbf;
+  background-color: white;
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Job Apply Button */
+
+.btn-apply {
+  display: inline-block;
+  background-color: #0c4bbf;
+  color: white;
+  padding: 10px 20px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.btn-apply:hover {
+  color: #f3f2f1;
+  background-color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .job-container,
+  .apply-section {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,163 @@
+/* Main Content Layout */
+.main-content {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+  background-color: #f9fafb;
+  min-height: calc(
+    100vh - 150px
+  ); /* Adjust based on header and footer height */
+}
+
+.applicant-details-container {
+  flex: 1; /* Takes 1 part of the space */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: fit-content; /* Adjust height to content */
+  position: sticky; /* Make it sticky */
+  top: 100px; /* Adjust based on header height + some padding */
+}
+
+.applicant-list-container {
+  flex: 2; /* Takes 2 parts of the space */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px G10px rgba(0, 0, 0, 0.1);
+}
+
+.applicant-list-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.5em;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+/* Applicant Table Styling */
+.applicant-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.applicant-table th,
+.applicant-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+.applicant-table th {
+  background-color: #f9fafb; /* A modern blue/purple */
+  color: #475467;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.applicant-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.applicant-table tbody tr:hover {
+  background-color: #f1f1f1;
+  cursor: default;
+}
+
+.btn-detail {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-detail:hover {
+  background-color: #1f7a38;
+}
+
+/* No Applicants Placeholder */
+.no-applicants-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+  color: #777;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+.placeholder-icon-container {
+  margin-bottom: 15px;
+}
+.placeholder-icon {
+  font-size: 4em; /* Increased size */
+  color: #cccccc; /* Grey color */
+}
+.placeholder-text {
+  font-size: 1.2em;
+  color: #888;
+}
+
+/* Applicant Details View (Left Column) */
+.details-placeholder {
+  text-align: center;
+  color: #777;
+  padding: 30px;
+}
+.details-placeholder i {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: #aaa;
+}
+.detail-applicant-logo {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 20px auto;
+  border: 3px solid #eee;
+}
+.details-view h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
+}
+.details-view p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  font-size: 0.95em;
+}
+.details-view p strong {
+  color: #555;
+}
+.document-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+.document-list li {
+  margin-bottom: 8px;
+  font-size: 0.9em;
+}
+.document-list a {
+  color: #2a64f2;
+  text-decoration: none;
+}
+.document-list a:hover {
+  text-decoration: underline;
+}
+.no-file-text {
+  color: #999;
+  font-style: italic;
+}

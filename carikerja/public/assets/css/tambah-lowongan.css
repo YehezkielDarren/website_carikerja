@@ -1,0 +1,396 @@
+/* Search-filter */
+.search-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 0;
+  background: #f8f8f8;
+}
+.search-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.search-input:focus {
+  border-color: #0c4bbf;
+}
+.search-button {
+  border: none;
+  border-radius: 0 4px 4px 0;
+  padding: 10px 20px;
+  background-color: #0c4bbf;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.search-button:hover {
+  background-color: #073a89;
+}
+.search-input.input-error {
+  border-color: red !important; /* Tambahkan !important jika perlu untuk override */
+}
+
+.search-error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+  /* display: none; akan diatur oleh JS */
+  text-align: left; /* Sesuaikan jika search-container tidak full width */
+  padding-left: 5px; /* Sedikit padding agar tidak terlalu mepet */
+}
+/* Container styling (optional for layout) */
+.filter-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Modern dropdown select */
+.custom-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.custom-select:focus {
+  border-color: #0c4bbf;
+}
+.custom-select:hover {
+  border-color: #999;
+}
+@media (max-width: 768px) {
+  .search,
+  .filter-container {
+    flex-direction: column;
+  }
+
+  .search-input,
+  .custom-select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* Bagian main */
+main {
+  min-height: 100vh;
+  width: 100%;
+}
+main #welcome {
+  font-weight: bolder;
+  padding-bottom: 10px;
+}
+.welcome {
+  text-align: center;
+  font-weight: bolder;
+  font-size: x-large;
+}
+.welcome span {
+  text-transform: uppercase;
+  color: #0c4bbf;
+}
+/* container pengumuman */
+.announcement-container {
+  overflow: hidden;
+  background: linear-gradient(to right, #1f1c2c, #928dab);
+  padding: 10px;
+  display: flex;
+}
+#announcement-title {
+  padding: 5px;
+  padding-left: 25px;
+  background: linear-gradient(to right, #f3f2f1, #928dab);
+}
+.announcement-title p {
+  color: #24262b;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.box-pengumuman {
+  border-radius: 3px;
+  background-color: #f3f2f1;
+  white-space: nowrap;
+  display: inline-block;
+  padding: 5px 20px 5px 10px;
+  animation: marquee 20s linear infinite;
+  margin: 10px;
+}
+.box-pengumuman h3 {
+  color: black;
+}
+.box-pengumuman h5 {
+  color: #6a6a6a;
+}
+.urgent-box {
+  background-color: red;
+  padding: 2px 5px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.urgent {
+  font-weight: bold;
+  font-size: 10px;
+  color: #f3f2f1;
+}
+/* Container */
+
+.job-container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 20px auto;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Job Box */
+.job-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px; /* Setiap job box memiliki lebar maksimum */
+  transition: transform 0.3s ease;
+}
+
+.job-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Job Image */
+.job-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Job Content */
+.job-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Company Logo */
+.company-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Job Title */
+.job-title {
+  font-size: 1.4em;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Job Description */
+.job-desc {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 10px;
+  text-justify: inter-word;
+}
+/* Job Location */
+.job-location {
+  font-size: 1.1em;
+  color: #6a6a6a;
+  margin-bottom: 10px;
+}
+/* Job Salary */
+.job-salary {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+/* Job Status */
+.job-status {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-radius: 20px;
+  color: white;
+  background-color: cadetblue;
+  margin-top: 10px;
+}
+.job-date {
+  font-size: 0.8em;
+  color: #999;
+  margin-top: 5px;
+}
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ccc;
+  color: #0c4bbf;
+  text-decoration: none;
+  margin: 10px 50px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  gap: 10px; /* Jarak antara ikon dan teks */
+  transition: 0.3s ease-in-out;
+}
+
+.btn-detail:hover {
+  color: #f3f2f1;
+  background-color: #27ae60;
+  font-weight: bold;
+}
+
+.btn-detail img {
+  width: 20px; /* Ukuran ikon lebih kecil */
+  height: auto;
+}
+
+/* Responsiveness */
+@media (min-width: 768px) {
+  .container {
+    justify-content: space-between;
+  }
+}
+
+/* bagian footer */
+footer {
+  background: linear-gradient(
+    to right,
+    #1f1c2c,
+    #928dab
+  ); /* Warna latar belakang footer */
+  color: white; /* Warna teks default di footer */
+  text-align: center;
+  padding: 20px 15px; /* Padding atas/bawah dan kiri/kanan */
+  margin-top: 30px; /* Memberi sedikit jarak dari konten di atasnya */
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+footer p {
+  margin: 8px 0; /* Jarak antar paragraf di footer */
+}
+
+footer .creators a {
+  color: #bbb; /* Warna link nama pembuat */
+  text-decoration: none;
+  margin: 0 5px; /* Jarak antar nama pembuat */
+}
+
+footer .creators a:hover {
+  color: #fff; /* Warna link saat di-hover */
+  text-decoration: underline;
+}
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  text-decoration: none;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  color: white;
+}
+
+.btn-action.lihat {
+  background-color: #3498db;
+}
+
+.btn-action.edit {
+  background-color: #f1c40f;
+  color: black;
+}
+
+.btn-action.hapus {
+  background-color: #e74c3c;
+}
+
+.btn-action:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* Tombol Tambah Pekerjaan Fixed */
+.btn-tambah-pekerjaan {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background-color: #28a745; /* Warna hijau, sesuaikan jika perlu */
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 50px; /* Membuatnya lebih bulat */
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Memastikan tombol di atas konten lain */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-tambah-pekerjaan:hover {
+  background-color: #218838; /* Warna hijau lebih gelap saat hover */
+  transform: translateY(-2px); /* Sedikit naik saat hover */
+}

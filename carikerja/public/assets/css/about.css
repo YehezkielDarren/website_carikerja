@@ -1,0 +1,103 @@
+main {
+  background-color: #f9fafb;
+  padding: 40px 20px;
+}
+
+.about-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaecf0;
+  overflow: hidden;
+}
+
+.hero-section {
+  padding: 60px 40px;
+  text-align: center;
+  background: linear-gradient(135deg, #2a64f2, #1e4ab7);
+  color: #ffffff;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-section .subtitle {
+  font-size: 1.2rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.content-section {
+  padding: 40px;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.content-section h2,
+.team-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1d2939;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.content-section p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #475467;
+  text-align: justify;
+}
+
+.team-section {
+  padding: 40px;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.creator-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #eaecf0;
+  text-align: center;
+  padding: 30px 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.creator-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
+  cursor: not-allowed;
+}
+
+.creator-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.creator-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d2939;
+  margin: 0 0 5px 0;
+}
+
+.creator-card .nim {
+  font-size: 0.9rem;
+  color: #475467;
+  margin: 0;
+}

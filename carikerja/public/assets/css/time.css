@@ -1,0 +1,25 @@
+/* clock style */
+.clock-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #ffffff;
+  color: #0c4bbf;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: "Courier New", monospace;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  text-align: center;
+}
+
+.clock-time {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.clock-date {
+  font-size: 14px;
+  margin-top: 4px;
+}

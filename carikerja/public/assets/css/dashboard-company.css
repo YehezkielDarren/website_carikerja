@@ -1,0 +1,431 @@
+/* Search-filter */
+.search-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 0;
+  background: #f8f8f8;
+}
+.search-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.search-input:focus {
+  border-color: #0c4bbf;
+}
+.search-button {
+  border: none;
+  border-radius: 0 4px 4px 0;
+  padding: 10px 20px;
+  background-color: #2a64f2;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.search-button:hover {
+  background-color: #073a89;
+}
+.search-input.input-error {
+  border-color: red !important; /* Tambahkan !important jika perlu untuk override */
+}
+
+.search-error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+  /* display: none; akan diatur oleh JS */
+  text-align: left; /* Sesuaikan jika search-container tidak full width */
+  padding-left: 5px; /* Sedikit padding agar tidak terlalu mepet */
+}
+/* Container styling (optional for layout) */
+.filter-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Modern dropdown select */
+.custom-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.custom-select:focus {
+  border-color: #2a64f2;
+}
+.custom-select:hover {
+  border-color: #999;
+}
+@media (max-width: 768px) {
+  .search,
+  .filter-container {
+    flex-direction: column;
+  }
+
+  .search-input,
+  .custom-select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* Bagian main */
+main {
+  min-height: 100vh;
+  width: 100%;
+}
+/* Layout untuk dashboard */
+.dashboard-layout {
+  display: flex;
+  flex-wrap: wrap; /* Memungkinkan wrap jika layar terlalu kecil */
+  gap: 20px; /* Jarak antara kolom kiri dan kanan */
+  padding: 20px; /* Padding untuk keseluruhan layout */
+}
+main #welcome {
+  font-weight: bolder;
+  padding-bottom: 10px;
+}
+.welcome {
+  text-align: center;
+  font-weight: bolder;
+  font-size: x-large;
+}
+.welcome span {
+  text-transform: uppercase;
+  color: #0c4bbf;
+}
+.box-pengumuman {
+  border-radius: 3px;
+  background-color: #f3f2f1;
+  white-space: nowrap;
+  display: inline-block;
+  padding: 5px 20px 5px 10px;
+  animation: marquee 20s linear infinite;
+  margin: 10px;
+}
+.box-pengumuman h3 {
+  color: black;
+}
+.box-pengumuman h5 {
+  color: #6a6a6a;
+}
+.urgent-box {
+  background-color: red;
+  padding: 2px 5px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.urgent {
+  font-weight: bold;
+  font-size: 10px;
+  color: #f3f2f1;
+}
+/* Container */
+
+.job-container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 20px auto;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Job Box */
+.job-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px; /* Setiap job box memiliki lebar maksimum */
+  transition: transform 0.3s ease;
+}
+
+.job-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Job Image */
+.job-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Job Content */
+.job-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Company Logo */
+.company-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Job Title */
+.job-title {
+  font-size: 1.4em;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Job Description */
+.job-desc {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 10px;
+  text-justify: inter-word;
+}
+/* Job Location */
+.job-location {
+  font-size: 1.1em;
+  color: #6a6a6a;
+  margin-bottom: 10px;
+}
+/* Job Salary */
+.job-salary {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Job Status */
+.job-status {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-radius: 20px;
+  color: white;
+  background-color: cadetblue;
+  margin-top: 10px;
+}
+.job-date {
+  font-size: 0.8em;
+  color: #999;
+  margin-top: 5px;
+}
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ccc;
+  color: #0c4bbf;
+  text-decoration: none;
+  margin: 10px 50px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  gap: 10px; /* Jarak antara ikon dan teks */
+  transition: 0.3s ease-in-out;
+}
+
+.btn-detail:hover {
+  color: #f3f2f1;
+  background-color: #27ae60;
+  font-weight: bold;
+}
+
+.btn-detail img {
+  width: 20px; /* Ukuran ikon lebih kecil */
+  height: auto;
+}
+
+/* Responsiveness */
+@media (min-width: 768px) {
+  .container {
+    justify-content: space-between;
+  }
+}
+
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  text-decoration: none;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  color: white;
+}
+
+.btn-action.lihat {
+  background-color: #2a64f2;
+}
+
+.btn-action.edit {
+  background-color: #f79009;
+  color: black;
+}
+
+.btn-action.hapus {
+  background-color: #d92d20;
+}
+
+.btn-action:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* Kolom daftar lowongan (kiri) */
+.job-listings-column {
+  flex: 2; /* Mengambil 2 bagian dari ruang yang tersedia */
+  min-width: 300px; /* Lebar minimum sebelum wrap */
+}
+
+/* Kolom form tambah lowongan (kanan) */
+.add-job-column {
+  flex: 1; /* Mengambil 1 bagian dari ruang yang tersedia */
+  min-width: 300px; /* Lebar minimum sebelum wrap */
+}
+
+.add-job-form-container {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.add-job-form-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 1.7em;
+  font-weight: 600;
+}
+
+.add-job-form-container .form-group {
+  margin-bottom: 18px;
+}
+
+.add-job-form-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #454545;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.add-job-form-container input[type="text"],
+.add-job-form-container input[type="date"],
+.add-job-form-container select,
+.add-job-form-container textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-job-form-container input[type="text"]:focus,
+.add-job-form-container input[type="date"]:focus,
+.add-job-form-container select:focus,
+.add-job-form-container textarea:focus {
+  border-color: #2a64f2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(12, 75, 191, 0.15);
+}
+
+.add-job-form-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.add-job-form-container .btn-submit-lowongan {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: bold;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.add-job-form-container .btn-submit-lowongan:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+/* Penyesuaian untuk alert agar tidak terlalu lebar jika kolom kiri kosong */
+.job-listings-column .alert {
+  margin-bottom: 20px; /* Sesuaikan jika perlu */
+}

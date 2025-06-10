@@ -1,0 +1,304 @@
+/* keyframes */
+@keyframes marquee {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
+}
+/* Search-filter */
+.search-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 0;
+  background: #f8f8f8;
+}
+.search-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.search-input:focus {
+  border-color: #0c4bbf;
+}
+.search-button {
+  border: none;
+  border-radius: 0 4px 4px 0;
+  padding: 10px 20px;
+  background-color: #0c4bbf;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.search-button:hover {
+  background-color: #073a89;
+}
+/* Container styling (optional for layout) */
+.filter-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Modern dropdown select */
+.custom-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.custom-select:focus {
+  border-color: #0c4bbf;
+}
+.custom-select:hover {
+  border-color: #999;
+}
+@media (max-width: 768px) {
+  .search,
+  .filter-container {
+    flex-direction: column;
+  }
+
+  .search-input,
+  .custom-select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* Bagian main */
+main {
+  /* background: linear-gradient(to right, #1f1c2c, #928dab); */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Pastikan halaman minimal setinggi viewport */
+  padding-bottom: 100px; /* Tambahkan ruang agar footer tidak tertabrak */
+}
+
+main #welcome {
+  /* background: linear-gradient(to right, #1f1c2c, #928dab); */
+  font-weight: bolder;
+  padding-bottom: 10px;
+}
+.welcome {
+  text-align: center;
+  font-weight: bolder;
+  font-size: x-large;
+}
+.welcome span {
+  text-transform: uppercase;
+  color: #0c4bbf;
+}
+
+/* container pengumuman */
+.announcement-container {
+  overflow: hidden;
+  background: linear-gradient(to right, #1f1c2c, #928dab);
+  padding: 10px;
+  display: flex;
+}
+#announcement-title {
+  padding: 5px;
+  padding-left: 25px;
+  background: linear-gradient(to right, #f3f2f1, #928dab);
+}
+.announcement-title p {
+  color: #24262b;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.box-pengumuman {
+  border-radius: 3px;
+  background-color: #f3f2f1;
+  white-space: nowrap;
+  display: inline-block;
+  padding: 5px 20px 5px 10px;
+  animation: marquee 20s linear infinite;
+  margin: 10px;
+}
+.box-pengumuman h3 {
+  color: black;
+}
+.box-pengumuman h5 {
+  color: #6a6a6a;
+}
+.urgent-box {
+  background-color: red;
+  padding: 2px 5px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.urgent {
+  font-weight: bold;
+  font-size: 10px;
+  color: #f3f2f1;
+}
+/* Container */
+
+.job-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.job-box {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+}
+
+/* logo container tetap berukuran proporsional */
+.logo-container {
+  flex: 1 1 150px;
+  max-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f2f1;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.logo-container img {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.job-details {
+  flex: 2 1 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.job-details h1 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.company-name,
+.location,
+.salary {
+  font-size: 1rem;
+  color: #555;
+  margin: 0.5rem 0;
+}
+
+.description,
+.requirements {
+  margin-top: 1.5rem;
+}
+
+.description p,
+.requirements li {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Tombol lamar */
+.btn-apply,
+.btn-alrapply {
+  margin-top: 2rem;
+  display: inline-block;
+  padding: 10px 20px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.btn-apply {
+  background-color: #0c4bbf;
+  color: white;
+}
+
+.btn-apply:hover {
+  background-color: #073a89;
+}
+
+.btn-alrapply {
+  background-color: #ccc;
+  color: #f3f3f3;
+  /* cursor: not-allowed; */
+}
+
+/* Responsiveness */
+@media (min-width: 768px) {
+  .container {
+    justify-content: space-between;
+  }
+}
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.btn-back {
+  background-color: #0c4bbf;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}

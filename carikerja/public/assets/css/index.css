@@ -1,0 +1,474 @@
+/* keyframes */
+@keyframes marquee {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
+}
+/* Search-filter */
+.search-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 0;
+  background: #f8f8f8;
+}
+.search-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.search-input:focus {
+  border-color: #2a64f2;
+}
+.search-button {
+  border: none;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 20px;
+  background-color: #2a64f2;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.search-button:hover {
+  background-color: #073a89;
+}
+.search-input.input-error {
+  border-color: red !important; /* Tambahkan !important jika perlu untuk override */
+}
+
+.search-error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+  /* display: none; akan diatur oleh JS */
+  text-align: left; /* Sesuaikan jika search-container tidak full width */
+  padding-left: 5px; /* Sedikit padding agar tidak terlalu mepet */
+}
+
+/* Container styling (optional for layout) */
+.filter-container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Modern dropdown select */
+.custom-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  flex: 1;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.custom-select:focus {
+  border-color: #0c4bbf;
+}
+.custom-select:hover {
+  border-color: #999;
+}
+@media (max-width: 768px) {
+  .search,
+  .filter-container {
+    flex-direction: column;
+  }
+
+  .search-input,
+  .custom-select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* Bagian main */
+main {
+  background: #f9fafb;
+  min-height: 100vh;
+  width: 100%;
+}
+main #welcome {
+  font-weight: bolder;
+  padding-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.welcome {
+  text-align: center;
+  font-weight: bolder;
+  font-size: x-large;
+}
+.welcome span {
+  text-transform: uppercase;
+  color: #0c4bbf;
+}
+/* container pengumuman */
+.announcement-container {
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+}
+#announcement-title {
+  padding: 5px;
+  padding-left: 25px;
+  background-color: #f9fafb;
+}
+.announcement-title p {
+  color: #1d2939;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.box-pengumuman {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Jarak antara logo dan detail */
+  background-color: #ffffff;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 0 12px; /* Jarak antar kartu */
+  width: 340px; /* Lebar kartu yang tetap */
+  height: 110px; /* Tinggi kartu yang tetap */
+  white-space: normal; /* Izinkan teks untuk wrap jika perlu */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: marquee 25s linear infinite; /* Anda bisa sesuaikan durasi animasi */
+}
+.box-pengumuman h3 {
+  color: black;
+}
+.box-pengumuman h5 {
+  color: #6a6a6a;
+}
+.box-pengumuman:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(29, 41, 57, 0.08);
+  border-color: #2a64f2;
+}
+.pengumuman-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain; /* Agar logo tidak gepeng */
+  border-radius: 8px;
+  flex-shrink: 0; /* Agar logo tidak mengecil */
+  background-color: #f9fafb; /* Latar belakang jika logo transparan */
+  padding: 5px;
+}
+
+.pengumuman-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden; /* Sembunyikan teks yang terlalu panjang */
+}
+
+.pengumuman-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d2939;
+  margin: 0 0 4px 0;
+  white-space: nowrap; /* Pastikan judul tidak wrap */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Tambahkan '...' jika judul terlalu panjang */
+}
+
+.pengumuman-company {
+  font-size: 0.875rem;
+  color: #475467;
+  margin: 0 0 10px 0;
+}
+
+.pengumuman-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Jarak antar meta item */
+  align-items: center;
+  font-size: 0.8rem;
+  color: #475467;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Jarak antara ikon dan teks */
+}
+
+.meta-item svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+  color: #98a2b3; /* Warna ikon */
+}
+
+.urgent-box {
+  background-color: red;
+  padding: 2px 5px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.urgent {
+  font-weight: bold;
+  font-size: 10px;
+  color: #f3f2f1;
+}
+/* Container */
+
+.job-container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 20px auto;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Job Box */
+.job-box {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaecf0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px; /* Setiap job box memiliki lebar maksimum */
+  transition: transform 0.3s ease;
+}
+
+.job-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.07);
+}
+.job-count {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: rgba(29, 41, 57, 0.85);
+  padding: 6px 14px;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+p.job-count-text {
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+.job-box:hover .job-count {
+  background-color: #2a64f2;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+/* Job Image */
+.job-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Job Content */
+.job-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Company Logo */
+.company-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Job Title */
+.job-title {
+  font-size: 1.4em;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Job Description */
+.job-desc {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 10px;
+  text-justify: inter-word;
+}
+/* Job Location */
+.job-location {
+  font-size: 1.1em;
+  color: #6a6a6a;
+  margin-bottom: 10px;
+}
+/* Job Salary */
+.job-salary {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Job Status */
+.job-status {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.9em;
+  font-weight: bold;
+  border-radius: 20px;
+  color: white;
+  background-color: cadetblue;
+  margin-top: 10px;
+}
+.job-date {
+  font-size: 0.8em;
+  color: #999;
+  margin-top: 5px;
+}
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 48px);
+  margin: 10px 24px 24px 24px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: #2a64f2;
+  color: #ffffff;
+  border: 1px solid #2a64f2;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 4px rgba(42, 100, 242, 0.15);
+}
+
+.btn-detail:hover {
+  background-color: #1e4ab7;
+  border-color: #1e4ab7;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(42, 100, 242, 0.25);
+}
+
+/* Mengatur ukuran ikon di dalam tombol */
+.btn-detail .arrow-icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+/* Membuat ikon bergerak sedikit ke kanan saat tombol di-hover */
+.btn-detail:hover .arrow-icon {
+  transform: translateX(5px);
+}
+
+/* Responsiveness */
+@media (min-width: 768px) {
+  .container {
+    justify-content: space-between;
+  }
+}
+.alert {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.alert-succes {
+  color: #3c763d; /* Warna teks hijau tua */
+  background-color: #dff0d8; /* Warna latar hijau muda */
+  border-color: #d6e9c6; /* Warna border hijau */
+}
+
+.btn-back {
+  background-color: #0c4bbf;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.job-box-hidden {
+  display: none;
+}
+.load-more-container {
+  text-align: center;
+  padding: 10px 0 40px 0; /* Jarak atas dan bawah */
+}
+.btn-load-more {
+  background-color: #ffffff;
+  color: #2a64f2;
+  border: 2px solid #2a64f2;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-load-more:hover {
+  background-color: #2A64F2;
+  color: #FFFFFF;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(42, 100, 242, 0.2);
+}
+.btn-load-more.hidden {
+  display: none;
+}
