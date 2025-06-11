@@ -112,6 +112,7 @@
     <title>Home - Cari Kerja.com</title>
   </head>
   <body>
+    
     <div class="clock-container">
       <div class="clock-time" id="clock">00:00:00</div>
       <div class="clock-date" id="date">Loading date...</div>
